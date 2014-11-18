@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.dao;
+package be.normegil.mylibrary.util.dao;
 
 import be.normegil.mylibrary.manga.Manga;
 import be.normegil.mylibrary.tools.ClassWrapper;

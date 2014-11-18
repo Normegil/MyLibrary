@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.constraint;
+package be.normegil.mylibrary.util.constraint;
 
 import org.apache.commons.lang3.StringUtils;
 

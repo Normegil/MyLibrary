@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.exception;
+package be.normegil.mylibrary.util.exception;
 
 public class InvocationTargetRuntimeException extends RuntimeException {
 

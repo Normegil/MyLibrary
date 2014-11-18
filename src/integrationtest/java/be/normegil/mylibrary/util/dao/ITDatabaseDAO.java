@@ -1,7 +1,7 @@
-package be.normegil.mylibrary.dao;
+package be.normegil.mylibrary.util.dao;
 
 import be.normegil.mylibrary.ApplicationProperties;
-import be.normegil.mylibrary.Entity;
+import be.normegil.mylibrary.util.Entity;
 import be.normegil.mylibrary.SpecificIntegrationTestProperties;
 import be.normegil.mylibrary.WarningTypes;
 import be.normegil.mylibrary.manga.Manga;

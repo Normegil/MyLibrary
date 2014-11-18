@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.dao;
+package be.normegil.mylibrary.util.dao;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

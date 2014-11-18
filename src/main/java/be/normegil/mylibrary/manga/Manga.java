@@ -1,7 +1,7 @@
 package be.normegil.mylibrary.manga;
 
-import be.normegil.mylibrary.Entity;
-import be.normegil.mylibrary.dao.GetAllQuery;
+import be.normegil.mylibrary.util.Entity;
+import be.normegil.mylibrary.util.dao.GetAllQuery;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 

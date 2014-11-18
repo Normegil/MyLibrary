@@ -1,8 +1,8 @@
 package be.normegil.mylibrary.tools;
 
 import be.normegil.mylibrary.Constants;
-import be.normegil.mylibrary.exception.IllegalAccessRuntimeException;
-import be.normegil.mylibrary.exception.InvocationTargetRuntimeException;
+import be.normegil.mylibrary.util.exception.IllegalAccessRuntimeException;
+import be.normegil.mylibrary.util.exception.InvocationTargetRuntimeException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

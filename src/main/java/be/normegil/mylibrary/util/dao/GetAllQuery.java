@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.dao;
+package be.normegil.mylibrary.util.dao;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

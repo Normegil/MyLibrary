@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.constraint;
+package be.normegil.mylibrary.util.constraint;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

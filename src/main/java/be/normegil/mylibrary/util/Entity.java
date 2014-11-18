@@ -1,4 +1,4 @@
-package be.normegil.mylibrary;
+package be.normegil.mylibrary.util;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;

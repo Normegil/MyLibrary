@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.dao;
+package be.normegil.mylibrary.util.dao;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import org.apache.commons.lang3.StringUtils;
