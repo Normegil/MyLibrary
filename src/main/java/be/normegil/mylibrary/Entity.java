@@ -1,16 +1,16 @@
 package be.normegil.mylibrary;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
 import java.util.UUID;
 
-@JsonAutoDetect(
-		fieldVisibility = JsonAutoDetect.Visibility.ANY,
-		getterVisibility = JsonAutoDetect.Visibility.NONE,
-		setterVisibility = JsonAutoDetect.Visibility.NONE
-)
+@MappedSuperclass
+@Access(AccessType.FIELD)
 public class Entity {
 
+	@Id
+	@Column(name = "ID")
+	@XmlAttribute
 	private UUID id;
 
 	public UUID getId() {
@@ -19,5 +19,5 @@ public class Entity {
 
 	public Entity() {
 		this.id = UUID.randomUUID();
-	 }
+	}
 }

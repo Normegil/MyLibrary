@@ -1,4 +1,8 @@
-package be.normegil.mylibrary;
+package be.normegil.mylibrary.manga;
+
+import be.normegil.mylibrary.Constants;
+import be.normegil.mylibrary.dao.DatabaseDAO;
+import be.normegil.mylibrary.manga.Manga;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
