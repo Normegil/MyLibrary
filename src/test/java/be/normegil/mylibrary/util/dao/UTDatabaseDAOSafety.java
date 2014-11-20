@@ -16,17 +16,17 @@ public class UTDatabaseDAOSafety {
 
 	@Before
 	public void setUp() throws Exception {
-		entity = new DatabaseDAO<>(Manga.class);
+		entity = new DatabaseDAO<Manga>() {
+			@Override
+			protected Class<Manga> getEntityClass() {
+				return Manga.class;
+			}
+		};
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		entity = null;
-	}
-
-	@Test(expected = ConstraintViolationException.class)
-	public void testConstructor_Null() throws Exception {
-		Validator.validate(CLASS.getConstructor(Class.class), new Object[]{null});
 	}
 
 	@Test(expected = ConstraintViolationException.class)

@@ -1,13 +1,13 @@
 package be.normegil.mylibrary.util.dao;
 
 import be.normegil.mylibrary.ApplicationProperties;
-import be.normegil.mylibrary.util.Entity;
 import be.normegil.mylibrary.SpecificIntegrationTestProperties;
 import be.normegil.mylibrary.WarningTypes;
 import be.normegil.mylibrary.manga.Manga;
 import be.normegil.mylibrary.tools.DAOHelper;
 import be.normegil.mylibrary.tools.DataFactory;
 import be.normegil.mylibrary.tools.FactoryRepository;
+import be.normegil.mylibrary.util.Entity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.junit.After;
@@ -31,7 +31,7 @@ public class ITDatabaseDAO {
 	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
 	private static final DataFactory<Manga> FACTORY = FactoryRepository.get(Manga.class);
 	private static final String ALTERNATIVE_TITLE = "AlternativeTitle";
-	public static final int DEFAULT_OFFSET = 0;
+	private static final int DEFAULT_OFFSET = 0;
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
 	private DatabaseDAO dao;
@@ -42,7 +42,12 @@ public class ITDatabaseDAO {
 		entityManagerFactory = Persistence.createEntityManagerFactory(SpecificIntegrationTestProperties.PERSISTENCE_UNIT_NAME);
 		entityManager = entityManagerFactory.createEntityManager();
 
-		dao = new DatabaseDAO<>(Manga.class);
+		dao = new DatabaseDAO<Manga>() {
+			@Override
+			protected Class getEntityClass() {
+				return Manga.class;
+			}
+		};
 		new DAOHelper().setEntityManager(dao, entityManager);
 
 		entity = insertDataInDatabase();
@@ -107,8 +112,9 @@ public class ITDatabaseDAO {
 	public void testSave_AlreadyExistingObject() throws Exception {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		entity.setName(ALTERNATIVE_TITLE);
-		dao.persist(entity);
+		Manga loadedEntity = (Manga) dao.get(entity.getId());
+		loadedEntity.setName(ALTERNATIVE_TITLE);
+		dao.persist(loadedEntity);
 		transaction.commit();
 
 		Manga foundEntity = (Manga) dao.get(entity.getId());
@@ -134,7 +140,8 @@ public class ITDatabaseDAO {
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		dao.remove(entity);
+		Manga loadedEntity = (Manga) dao.get(entityId);
+		dao.remove(loadedEntity);
 		transaction.commit();
 
 		assertNull(dao.get(entityId));
@@ -154,11 +161,13 @@ public class ITDatabaseDAO {
 	}
 
 	private Manga insertDataInDatabase() {
-		EntityTransaction transaction = entityManager.getTransaction();
+		EntityManager manager = entityManagerFactory.createEntityManager();
+		EntityTransaction transaction = manager.getTransaction();
 		transaction.begin();
 		Manga entity = FACTORY.getNew();
-		entityManager.persist(entity);
+		manager.persist(entity);
 		transaction.commit();
+		manager.close();
 		return entity;
 	}
 

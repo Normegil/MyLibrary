@@ -19,12 +19,12 @@ public class MangaTestSuite implements DataFactory<Manga> {
 
 	@Override
 	public Manga getDefault() {
-		return getDefault(true, true);
+		return getDefault(true, false);
 	}
 
 	@Override
 	public Manga getNew() {
-		return getNew(true, true);
+		return getNew(true, false);
 	}
 
 	@Override
@@ -32,7 +32,9 @@ public class MangaTestSuite implements DataFactory<Manga> {
 		Manga manga = new Manga();
 		manga.setName(NAME);
 
-		new EntityHelper().setId(manga, DEFAULT_ID);
+		if (withIds) {
+			new EntityHelper().setId(manga, DEFAULT_ID);
+		}
 		return manga;
 	}
 
@@ -41,7 +43,9 @@ public class MangaTestSuite implements DataFactory<Manga> {
 		Manga manga = new Manga();
 		manga.setName(NAME + getIndex());
 
-		new EntityHelper().setId(manga, UUID.randomUUID());
+		if (withIds) {
+			new EntityHelper().setId(manga, UUID.randomUUID());
+		}
 		return manga;
 	}
 

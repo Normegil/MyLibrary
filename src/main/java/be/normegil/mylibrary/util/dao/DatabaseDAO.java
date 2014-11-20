@@ -9,16 +9,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.stream.Stream;
 
-public class DatabaseDAO<E> implements DAO<E> {
+public abstract class DatabaseDAO<E> implements DAO<E> {
 
 	@PersistenceContext(unitName = ApplicationProperties.PERSISTENCE_UNIT_NAME)
 	private EntityManager entityManager;
-
-	private Class<E> entityClass;
-
-	public DatabaseDAO(@NotNull Class<E> entityClass) {
-		this.entityClass = entityClass;
-	}
 
 	public long getNumberOfElements() {
 		return (long) entityManager.createQuery(getNumberOfElementsQuery()).getSingleResult();
@@ -51,16 +45,14 @@ public class DatabaseDAO<E> implements DAO<E> {
 		entityManager.remove(entity);
 	}
 
-	protected Class<E> getEntityClass() {
-		return entityClass;
-	}
+	protected abstract Class<E> getEntityClass();
 
 	private String getGetAllQuery() {
-		GetAllQuery annotation = entityClass.getAnnotation(GetAllQuery.class);
+		GetAllQuery annotation = getEntityClass().getAnnotation(GetAllQuery.class);
 		if (annotation == null) {
-			throw new IllegalStateException("GetAllQuery Annotation not found for " + entityClass);
+			throw new IllegalStateException("GetAllQuery Annotation not found for " + getEntityClass());
 		} else if (StringUtils.isBlank(annotation.value())) {
-			throw new IllegalStateException("Blank query found for " + entityClass);
+			throw new IllegalStateException("Blank query found for " + getEntityClass());
 		} else {
 			return annotation.value();
 		}
