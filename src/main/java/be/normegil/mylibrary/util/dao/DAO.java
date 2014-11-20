@@ -8,7 +8,7 @@ public interface DAO<E> {
 
 	public Stream<E> getAll();
 
-	public Stream<E> getAll(final int offset, final int limit);
+	public Stream<E> getAll(final long offset, final int limit);
 
 	public E get(@NotNull final Object id);
 
