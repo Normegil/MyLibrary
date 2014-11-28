@@ -10,30 +10,36 @@ import java.util.UUID;
 
 public interface RESTService<E> {
 
-//	@GET
-//	@Produces(Constants.MediaType.JSON)
-//	Response getAll(@Context UriInfo info, @PathParam("offset") Long offset, @PathParam("limit") Integer limit);
+	@GET
+	@Produces(Constants.MediaType.JSON)
+	Response getAll(@Context final UriInfo info, @QueryParam("offset") final Long offset, @QueryParam("limit") final Integer limit);
 
 	@Path("/{ID}")
 	@GET
 	@Produces(Constants.MediaType.JSON)
-	E get(@Context UriInfo info, @PathParam("ID") UUID id);
+	Response get(@Context final UriInfo info, @PathParam("ID") final UUID id);
 
-	@PUT
-	@Consumes({Constants.MediaType.JSON, Constants.MediaType.XML})
-	Response create(@Context UriInfo info, E entity);
+	@POST
+	@Consumes(Constants.MediaType.JSON)
+	@Produces(Constants.MediaType.JSON)
+	Response create(@Context final UriInfo info, final E entity);
 
 	@Path("/{ID}")
 	@PUT
-	Response updateByPUT(@PathParam("ID") UUID id, E entity);
+	@Consumes(Constants.MediaType.JSON)
+	@Produces(Constants.MediaType.JSON)
+	Response updateByPUT(@PathParam("ID") final UUID id, final E entity);
 
 	@Path("/{ID}")
 	@POST
-	Response updateByPOST(@Context UriInfo info, @PathParam("ID") UUID id, E entity);
+	@Consumes(Constants.MediaType.JSON)
+	@Produces(Constants.MediaType.JSON)
+	Response updateByPOST(@Context final UriInfo info, @PathParam("ID") final UUID id, final E entity);
 
 	@DELETE
 	@Path("/{ID}")
-	Response delete(@PathParam("ID") UUID id);
+	@Produces(Constants.MediaType.JSON)
+	Response delete(@PathParam("ID") final UUID id);
 
 	Class<? extends E> getSupportedClass();
 }

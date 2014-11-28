@@ -21,6 +21,7 @@ import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -104,7 +105,8 @@ public class ITDatabaseDAO {
 
 	@Test
 	public void testGet() throws Exception {
-		Entity foundEntity = (Entity) dao.get(entity.getId());
+		Optional optional = dao.get(entity.getId());
+		Entity foundEntity = (Entity) optional.get();
 		assertEquals(entity, foundEntity);
 	}
 
@@ -112,12 +114,14 @@ public class ITDatabaseDAO {
 	public void testSave_AlreadyExistingObject() throws Exception {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		Manga loadedEntity = (Manga) dao.get(entity.getId());
+		Optional optional = dao.get(entity.getId());
+		Manga loadedEntity = (Manga) optional.get();
 		loadedEntity.setName(ALTERNATIVE_TITLE);
 		dao.persist(loadedEntity);
 		transaction.commit();
 
-		Manga foundEntity = (Manga) dao.get(entity.getId());
+		Optional otherOptional = dao.get(entity.getId());
+		Manga foundEntity = (Manga) otherOptional.get();
 		assertEquals(ALTERNATIVE_TITLE, foundEntity.getName());
 	}
 
@@ -130,7 +134,8 @@ public class ITDatabaseDAO {
 		dao.persist(newEntity);
 		transaction.commit();
 
-		Entity foundEntity = (Entity) dao.get(newEntity.getId());
+		Optional optional = dao.get(newEntity.getId());
+		Entity foundEntity = (Entity) optional.get();
 		assertEquals(newEntity, foundEntity);
 	}
 
@@ -140,7 +145,8 @@ public class ITDatabaseDAO {
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
-		Manga loadedEntity = (Manga) dao.get(entityId);
+		Optional optional = dao.get(entityId);
+		Manga loadedEntity = (Manga) optional.get();
 		dao.remove(loadedEntity);
 		transaction.commit();
 

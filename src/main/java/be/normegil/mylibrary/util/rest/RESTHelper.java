@@ -61,15 +61,15 @@ public class RESTHelper {
 		return services;
 	}
 
-	public Collection<URI> getRESTUri(final URI baseUri, final Class<? extends Entity> dataClass, final Collection<? extends Entity> entities) {
-		Set<URI> uris = new HashSet<>();
+	public List<URI> toUri(final URI baseUri, final Collection<? extends Entity> entities) {
+		List<URI> uris = new ArrayList<>();
 		for (Entity entity : entities) {
-			uris.add(getRESTUri(baseUri, dataClass, entity));
+			uris.add(toUri(baseUri, entity));
 		}
 		return uris;
 	}
 
-	public URI getRESTUri(final URI baseUri, final Class<? extends Entity> dataClass, final Entity entity) {
+	public URI toUri(final URI baseUri, final Entity entity) {
 		String baseUriAsString = baseUri.toString();
 		RESTHelper helper = new RESTHelper();
 
@@ -77,16 +77,12 @@ public class RESTHelper {
 			baseUriAsString += PATH_SEPARATOR;
 		}
 
-		return URI.create(baseUriAsString + helper.getPathFor(dataClass) + PATH_SEPARATOR + entity.getId());
+		return URI.create(baseUriAsString + helper.getPathFor(entity.getClass()) + PATH_SEPARATOR + entity.getId());
 	}
 
 	public UUID toUUID(@NotNull @URIWithID final URI uri) {
 		String uuidString = StringUtils.substringAfterLast(uri.toString(), PATH_SEPARATOR);
 		return UUID.fromString(uuidString);
-	}
-
-	public URI toURI(@NotNull URI baseURL, @NotNull final UUID uuid) {
-		return URI.create(baseURL.toString() + PATH_SEPARATOR + uuid.toString());
 	}
 
 	public URI removeParameters(final URI uri) {

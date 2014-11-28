@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public abstract class DatabaseDAO<E> implements DAO<E> {
@@ -38,8 +39,8 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 				.getResultList().stream();
 	}
 
-	public E get(@NotNull final Object id) {
-		return entityManager.find(getEntityClass(), id);
+	public Optional<E> get(@NotNull final Object id) {
+		return Optional.ofNullable(entityManager.find(getEntityClass(), id));
 	}
 
 	@Override

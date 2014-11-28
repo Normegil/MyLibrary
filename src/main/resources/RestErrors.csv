@@ -1,0 +1,5 @@
+#Code;HttpStatus;MoreInfoURI;Message;DevelopperMessage
+4001;;;;
+4000;400;https://github.com/Normegil/MyLibrary/wiki/4000;ID required but not found;An ID was required by your request but none was specified
+4040;404;https://github.com/Normegil/MyLibrary/wiki/4040;Loaded entity not found;The entity was not found in the database
+5000;500;https://github.com/Normegil/MyLibrary/wiki/4000;Internal Server error. Please return the complete error to the server administrator.;

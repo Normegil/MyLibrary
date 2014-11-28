@@ -12,7 +12,10 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<jacskon.version>2.4.2</jacskon.version>
+		<slf4j.version>1.7.7</slf4j.version>
 	</properties>
 
 	<dependencies>
@@ -21,6 +24,17 @@
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -60,6 +74,7 @@
 			<version>${jacskon.version}</version>
 		</dependency>
 
+		<!-- TESTING DEPENDENCIES-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
