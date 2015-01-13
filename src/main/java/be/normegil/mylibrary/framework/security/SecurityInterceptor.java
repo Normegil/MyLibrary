@@ -1,19 +1,19 @@
-package be.normegil.mylibrary.util.security;
+package be.normegil.mylibrary.framework.security;
 
 import be.normegil.mylibrary.Constants;
 import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.user.UserDatabaseDAO;
-import be.normegil.mylibrary.util.Couple;
-import be.normegil.mylibrary.util.URIHelper;
-import be.normegil.mylibrary.util.exception.ParseRuntimeException;
-import be.normegil.mylibrary.util.exception.WebApplicationException;
-import be.normegil.mylibrary.util.rest.RESTHelper;
-import be.normegil.mylibrary.util.rest.RESTMethod;
-import be.normegil.mylibrary.util.rest.error.ErrorCode;
-import be.normegil.mylibrary.util.security.identification.Authenticator;
-import be.normegil.mylibrary.util.security.rightsmanagement.RightsManager;
-import be.normegil.mylibrary.util.security.rightsmanagement.ressource.Resource;
-import be.normegil.mylibrary.util.security.rightsmanagement.ressource.SpecificResource;
+import be.normegil.mylibrary.framework.Couple;
+import be.normegil.mylibrary.framework.URIHelper;
+import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
+import be.normegil.mylibrary.framework.exception.WebApplicationException;
+import be.normegil.mylibrary.framework.rest.RESTHelper;
+import be.normegil.mylibrary.framework.rest.RESTMethod;
+import be.normegil.mylibrary.framework.rest.error.ErrorCode;
+import be.normegil.mylibrary.framework.security.identification.Authenticator;
+import be.normegil.mylibrary.framework.security.rightsmanagement.RightsManager;
+import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.SpecificResource;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.lang3.StringUtils;
 

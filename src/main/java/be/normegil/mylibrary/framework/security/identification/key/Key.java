@@ -1,9 +1,9 @@
-package be.normegil.mylibrary.util.security.identification.key;
+package be.normegil.mylibrary.framework.security.identification.key;
 
-import be.normegil.mylibrary.util.Entity;
-import be.normegil.mylibrary.util.constraint.NotEmpty;
-import be.normegil.mylibrary.util.exception.InvalidKeySpecRuntimeException;
-import be.normegil.mylibrary.util.exception.NoSuchAlgorithmRuntimeException;
+import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.exception.InvalidKeySpecRuntimeException;
+import be.normegil.mylibrary.framework.exception.NoSuchAlgorithmRuntimeException;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

@@ -1,13 +1,13 @@
-package be.normegil.mylibrary.util.security.identification.jwt;
+package be.normegil.mylibrary.framework.security.identification.jwt;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.user.UserDatabaseDAO;
-import be.normegil.mylibrary.util.DateHelper;
-import be.normegil.mylibrary.util.exception.JOSERuntimeException;
-import be.normegil.mylibrary.util.exception.ParseRuntimeException;
-import be.normegil.mylibrary.util.security.identification.key.KeyManager;
-import be.normegil.mylibrary.util.security.identification.key.KeyType;
+import be.normegil.mylibrary.framework.DateHelper;
+import be.normegil.mylibrary.framework.exception.JOSERuntimeException;
+import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
+import be.normegil.mylibrary.framework.security.identification.key.KeyManager;
+import be.normegil.mylibrary.framework.security.identification.key.KeyType;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jose.crypto.ECDSAVerifier;

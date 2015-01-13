@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.util.security.identification.annotation;
+package be.normegil.mylibrary.framework.security.identification.annotation;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;

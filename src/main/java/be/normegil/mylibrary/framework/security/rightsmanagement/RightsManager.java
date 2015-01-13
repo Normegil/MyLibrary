@@ -1,11 +1,11 @@
-package be.normegil.mylibrary.util.security.rightsmanagement;
+package be.normegil.mylibrary.framework.security.rightsmanagement;
 
 import be.normegil.mylibrary.user.User;
-import be.normegil.mylibrary.util.rest.RESTMethod;
-import be.normegil.mylibrary.util.security.rightsmanagement.group.Group;
-import be.normegil.mylibrary.util.security.rightsmanagement.ressource.Resource;
-import be.normegil.mylibrary.util.security.rightsmanagement.ressource.ResourceDatabaseDAO;
-import be.normegil.mylibrary.util.security.rightsmanagement.ressource.SpecificResource;
+import be.normegil.mylibrary.framework.rest.RESTMethod;
+import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
+import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.ResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.SpecificResource;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;

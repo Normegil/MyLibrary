@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.util.security.identification.key;
+package be.normegil.mylibrary.framework.security.identification.key;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;

@@ -1,13 +1,14 @@
-package be.normegil.mylibrary.util.security.identification;
+package be.normegil.mylibrary.framework.security.identification;
 
+import be.normegil.mylibrary.framework.Couple;
 import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.user.UserDatabaseDAO;
-import be.normegil.mylibrary.util.Couple;
-import be.normegil.mylibrary.util.exception.JOSERuntimeException;
-import be.normegil.mylibrary.util.exception.ParseRuntimeException;
-import be.normegil.mylibrary.util.exception.WebApplicationException;
-import be.normegil.mylibrary.util.rest.error.ErrorCode;
-import be.normegil.mylibrary.util.security.identification.jwt.JWTHelper;
+import be.normegil.mylibrary.framework.Couple;
+import be.normegil.mylibrary.framework.exception.JOSERuntimeException;
+import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
+import be.normegil.mylibrary.framework.exception.WebApplicationException;
+import be.normegil.mylibrary.framework.rest.error.ErrorCode;
+import be.normegil.mylibrary.framework.security.identification.jwt.JWTHelper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import org.mindrot.jbcrypt.BCrypt;

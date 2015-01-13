@@ -1,7 +1,7 @@
-package be.normegil.mylibrary.util.security.identification.key;
+package be.normegil.mylibrary.framework.security.identification.key;
 
-import be.normegil.mylibrary.util.constraint.NotEmpty;
-import be.normegil.mylibrary.util.dao.DatabaseDAO;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.ejb.Stateless;
 import javax.persistence.criteria.*;

@@ -1,8 +1,8 @@
-package be.normegil.mylibrary.util.security.rightsmanagement.ressource;
+package be.normegil.mylibrary.framework.security.rightsmanagement.ressource;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.user.User;
-import be.normegil.mylibrary.util.rest.RESTService;
+import be.normegil.mylibrary.framework.rest.RESTService;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;

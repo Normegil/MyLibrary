@@ -1,7 +1,7 @@
-package be.normegil.mylibrary.util.security.identification;
+package be.normegil.mylibrary.framework.security.identification;
 
-import be.normegil.mylibrary.util.security.SecurityInterceptor;
-import be.normegil.mylibrary.util.security.identification.annotation.AuthenticationNotRequired;
+import be.normegil.mylibrary.framework.security.SecurityInterceptor;
+import be.normegil.mylibrary.framework.security.identification.annotation.AuthenticationNotRequired;
 
 import javax.inject.Inject;
 import javax.ws.rs.container.DynamicFeature;

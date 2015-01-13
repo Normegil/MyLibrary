@@ -1,10 +1,10 @@
 package be.normegil.mylibrary.user;
 
 import be.normegil.mylibrary.ApplicationProperties;
-import be.normegil.mylibrary.util.Entity;
-import be.normegil.mylibrary.util.Updatable;
-import be.normegil.mylibrary.util.constraint.NotEmpty;
-import be.normegil.mylibrary.util.security.rightsmanagement.group.Group;
+import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.Updatable;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -1,7 +1,7 @@
 package be.normegil.mylibrary.user;
 
-import be.normegil.mylibrary.util.constraint.NotEmpty;
-import be.normegil.mylibrary.util.dao.DatabaseDAO;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

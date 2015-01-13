@@ -1,7 +1,7 @@
-package be.normegil.mylibrary.util.security.rightsmanagement.ressource;
+package be.normegil.mylibrary.framework.security.rightsmanagement.ressource;
 
-import be.normegil.mylibrary.util.dao.DatabaseDAO;
-import be.normegil.mylibrary.util.rest.RESTService;
+import be.normegil.mylibrary.framework.dao.DatabaseDAO;
+import be.normegil.mylibrary.framework.rest.RESTService;
 
 import javax.ejb.Stateless;
 import javax.persistence.criteria.*;
