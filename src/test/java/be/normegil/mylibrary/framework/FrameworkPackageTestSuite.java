@@ -1,14 +1,14 @@
-package be.normegil.mylibrary;
+package be.normegil.mylibrary.framework;
 
-import be.normegil.mylibrary.manga.MangaPackageTestSuite;
+import be.normegil.mylibrary.framework.constraint.ConstraintPackageTestSuite;
 import be.normegil.mylibrary.framework.dao.DAOPackageTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		MangaPackageTestSuite.class,
+		ConstraintPackageTestSuite.class,
 		DAOPackageTestSuite.class
 })
-public class TestMyLibrary {
+public class FrameworkPackageTestSuite {
 }

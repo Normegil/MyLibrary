@@ -1,14 +1,14 @@
 package be.normegil.mylibrary.manga;
 
 import be.normegil.mylibrary.ApplicationProperties;
-import be.normegil.mylibrary.util.URIHelper;
-import be.normegil.mylibrary.util.Updatable;
-import be.normegil.mylibrary.util.exception.WebApplicationException;
-import be.normegil.mylibrary.util.rest.CollectionResource;
-import be.normegil.mylibrary.util.rest.HttpStatus;
-import be.normegil.mylibrary.util.rest.RESTHelper;
-import be.normegil.mylibrary.util.rest.RESTService;
-import be.normegil.mylibrary.util.rest.error.ErrorCode;
+import be.normegil.mylibrary.framework.URIHelper;
+import be.normegil.mylibrary.framework.Updatable;
+import be.normegil.mylibrary.framework.exception.WebApplicationException;
+import be.normegil.mylibrary.framework.rest.CollectionResource;
+import be.normegil.mylibrary.framework.rest.HttpStatus;
+import be.normegil.mylibrary.framework.rest.RESTHelper;
+import be.normegil.mylibrary.framework.rest.RESTService;
+import be.normegil.mylibrary.framework.rest.error.ErrorCode;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;

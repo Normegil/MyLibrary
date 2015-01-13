@@ -1,6 +1,6 @@
 package be.normegil.mylibrary.tools;
 
-import be.normegil.mylibrary.util.dao.DatabaseDAO;
+import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.persistence.EntityManager;
 

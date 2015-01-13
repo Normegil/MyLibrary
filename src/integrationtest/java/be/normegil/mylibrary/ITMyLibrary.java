@@ -1,12 +1,12 @@
 package be.normegil.mylibrary;
 
-import be.normegil.mylibrary.util.UtilPackageIntegrationTestSuite;
+import be.normegil.mylibrary.framework.FrameworkPackageIntegrationTestSuite;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		UtilPackageIntegrationTestSuite.class
+		FrameworkPackageIntegrationTestSuite.class
 })
 public class ITMyLibrary {
 }

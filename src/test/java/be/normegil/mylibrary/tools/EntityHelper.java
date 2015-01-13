@@ -1,8 +1,8 @@
 package be.normegil.mylibrary.tools;
 
-import be.normegil.mylibrary.util.Entity;
-import be.normegil.mylibrary.util.exception.IllegalAccessRuntimeException;
-import be.normegil.mylibrary.util.exception.NoSuchFieldRuntimeException;
+import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.exception.IllegalAccessRuntimeException;
+import be.normegil.mylibrary.framework.exception.NoSuchFieldRuntimeException;
 
 import java.lang.reflect.Field;
 import java.util.Collection;

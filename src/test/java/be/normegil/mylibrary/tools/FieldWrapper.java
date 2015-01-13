@@ -1,6 +1,6 @@
 package be.normegil.mylibrary.tools;
 
-import be.normegil.mylibrary.util.exception.IllegalAccessRuntimeException;
+import be.normegil.mylibrary.framework.exception.IllegalAccessRuntimeException;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Field;

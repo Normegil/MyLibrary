@@ -1,9 +1,9 @@
 package be.normegil.mylibrary.tools;
 
-import be.normegil.mylibrary.util.constraint.NotEmpty;
-import be.normegil.mylibrary.util.exception.InterfaceNotFoundException;
-import be.normegil.mylibrary.util.exception.NoSuchFieldRuntimeException;
-import be.normegil.mylibrary.util.exception.NoSuchMethodRuntimeException;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.exception.InterfaceNotFoundException;
+import be.normegil.mylibrary.framework.exception.NoSuchFieldRuntimeException;
+import be.normegil.mylibrary.framework.exception.NoSuchMethodRuntimeException;
 
 import javax.validation.constraints.NotNull;
 import java.lang.reflect.Constructor;

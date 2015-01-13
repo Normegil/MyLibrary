@@ -1,9 +1,9 @@
 package be.normegil.mylibrary.manga;
 
-import be.normegil.mylibrary.util.Entity;
-import be.normegil.mylibrary.util.Updatable;
-import be.normegil.mylibrary.util.constraint.ExistingID;
-import be.normegil.mylibrary.util.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.Updatable;
+import be.normegil.mylibrary.framework.constraint.ExistingID;
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
