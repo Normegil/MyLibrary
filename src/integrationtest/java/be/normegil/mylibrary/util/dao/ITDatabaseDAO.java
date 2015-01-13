@@ -5,8 +5,8 @@ import be.normegil.mylibrary.SpecificIntegrationTestProperties;
 import be.normegil.mylibrary.WarningTypes;
 import be.normegil.mylibrary.manga.Manga;
 import be.normegil.mylibrary.tools.DAOHelper;
-import be.normegil.mylibrary.tools.DataFactory;
-import be.normegil.mylibrary.tools.FactoryRepository;
+import be.normegil.mylibrary.tools.Generator;
+import be.normegil.mylibrary.tools.GeneratorRepository;
 import be.normegil.mylibrary.util.Entity;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
 public class ITDatabaseDAO {
 
 	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<Manga> FACTORY = FactoryRepository.get(Manga.class);
+	private static final Generator<Manga> FACTORY = GeneratorRepository.get(Manga.class);
 	private static final String ALTERNATIVE_TITLE = "AlternativeTitle";
 	private static final int DEFAULT_OFFSET = 0;
 	private EntityManagerFactory entityManagerFactory;
@@ -127,7 +127,7 @@ public class ITDatabaseDAO {
 
 	@Test
 	public void testSave() throws Exception {
-		Entity newEntity = FACTORY.getNew();
+		Entity newEntity = FACTORY.getNew(true, false);
 
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
@@ -170,7 +170,7 @@ public class ITDatabaseDAO {
 		EntityManager manager = entityManagerFactory.createEntityManager();
 		EntityTransaction transaction = manager.getTransaction();
 		transaction.begin();
-		Manga entity = FACTORY.getNew();
+		Manga entity = FACTORY.getNew(true, false);
 		manager.persist(entity);
 		transaction.commit();
 		manager.close();

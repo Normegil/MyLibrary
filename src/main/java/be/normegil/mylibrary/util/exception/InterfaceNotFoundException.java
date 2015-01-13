@@ -1,6 +1,6 @@
 package be.normegil.mylibrary.util.exception;
 
-public class InterfaceNotFoundException extends RuntimeException{
+public class InterfaceNotFoundException extends RuntimeException {
 	public InterfaceNotFoundException(final String message) {
 		super(message);
 	}

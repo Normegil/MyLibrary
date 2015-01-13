@@ -1,0 +1,123 @@
+package be.normegil.mylibrary.util.security;
+
+import be.normegil.mylibrary.Constants;
+import be.normegil.mylibrary.user.User;
+import be.normegil.mylibrary.user.UserDatabaseDAO;
+import be.normegil.mylibrary.util.Couple;
+import be.normegil.mylibrary.util.URIHelper;
+import be.normegil.mylibrary.util.exception.ParseRuntimeException;
+import be.normegil.mylibrary.util.exception.WebApplicationException;
+import be.normegil.mylibrary.util.rest.RESTHelper;
+import be.normegil.mylibrary.util.rest.RESTMethod;
+import be.normegil.mylibrary.util.rest.error.ErrorCode;
+import be.normegil.mylibrary.util.security.identification.Authenticator;
+import be.normegil.mylibrary.util.security.rightsmanagement.RightsManager;
+import be.normegil.mylibrary.util.security.rightsmanagement.ressource.Resource;
+import be.normegil.mylibrary.util.security.rightsmanagement.ressource.SpecificResource;
+import com.nimbusds.jwt.SignedJWT;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+
+@Stateless
+@LocalBean
+public class SecurityInterceptor implements ContainerRequestFilter, ContainerResponseFilter {
+
+	@Inject
+	private UserDatabaseDAO userDAO;
+
+	@Inject
+	private Authenticator authenticator;
+
+	@Inject
+	private RightsManager rightsManager;
+
+	@Inject
+	private URIHelper uriHelper;
+
+	@Inject
+	private RESTHelper restHelper;
+
+	@Override
+	public void filter(final ContainerRequestContext request) throws IOException {
+		String authorizationHeader = request.getHeaderString(Constants.HTTP.Header.AUTHORIZATION);
+		String tokenHeader = request.getHeaderString(Constants.HTTP.Header.TOKEN);
+		Couple<User, SignedJWT> userInfo = identify(authorizationHeader, tokenHeader);
+
+		checkRights(userInfo.getFirst(), request.getUriInfo(), request.getMethod());
+
+		request.setProperty(Constants.HTTP.Header.TOKEN, userInfo.getSecond().serialize());
+	}
+
+	private void checkRights(final User user, final UriInfo uriInfo, final String methodName) {
+		Resource resource = restHelper.getResourceFor(uriInfo);
+		RESTMethod method;
+		if ("GET".equals(methodName) && isMainResource(resource)) {
+			method = RESTMethod.GET_ALL;
+		} else {
+			method = RESTMethod.valueOf(methodName);
+		}
+
+		if (!rightsManager.canAccess(user, resource, method)) {
+			throw new WebApplicationException(ErrorCode.ACCESS_DENIED, new IllegalArgumentException("User [" + user.getPseudo() + "] tried to [" + method + "] " + resource.toString() + " but is denied"));
+		}
+	}
+
+	private boolean isMainResource(final Resource resource) {
+		return !(resource instanceof SpecificResource);
+	}
+
+	private Couple<User, SignedJWT> identify(final String authorizationHeader, final String tokenHeader) {
+		Couple<User, SignedJWT> userInfo;
+		if (!StringUtils.isBlank(authorizationHeader)) {
+			userInfo = authenticateUserPassword(authorizationHeader);
+		} else if (!StringUtils.isBlank(tokenHeader)) {
+			userInfo = authenticateToken(tokenHeader);
+		} else {
+			throw new WebApplicationException(ErrorCode.BAD_AUTHENTICATION_REQUEST, new IllegalArgumentException("Authentication failed - Request invalid"));
+		}
+		return userInfo;
+	}
+
+	private Couple<User, SignedJWT> authenticateToken(final String token) {
+		try {
+			SignedJWT signedJWT = SignedJWT.parse(token);
+			return authenticator.authenticateToken(signedJWT);
+		} catch (ParseException e) {
+			throw new ParseRuntimeException(e);
+		}
+	}
+
+	private Couple<User, SignedJWT> authenticateUserPassword(final String authorizationHeader) {
+		String authorizationDatas = authorizationHeader.replaceFirst(Constants.Security.AUTHORIZATION_SCHEME + " ", "");
+		String clearUserAndPass;
+		clearUserAndPass = new String(Base64.getDecoder().decode(authorizationDatas));
+		String[] splittedUserPass = clearUserAndPass.split(":");
+		String user = splittedUserPass[0];
+		String pass = splittedUserPass[1];
+		return authenticator.authenticateUserPassword(user, pass);
+	}
+
+	@Override
+	public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
+		Object token = requestContext.getProperty(Constants.HTTP.Header.TOKEN);
+		if (token != null) {
+			List<Object> tokenHeader = Arrays.asList(token);
+			MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+			headers.put(Constants.HTTP.Header.TOKEN, tokenHeader);
+		}
+	}
+}

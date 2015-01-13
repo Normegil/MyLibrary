@@ -1,20 +1,20 @@
 package be.normegil.mylibrary.tools;
 
-import be.normegil.mylibrary.MangaTestSuite;
 import be.normegil.mylibrary.manga.Manga;
+import be.normegil.mylibrary.tools.generator.MangaGenerator;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class FactoryRepository {
+public class GeneratorRepository {
 
-	private static Map<Class, DataFactory> factories = new HashMap<>();
+	private static Map<Class, Generator> factories = new HashMap<>();
 	private static boolean isInitialized = false;
 
-	public static DataFactory get(Class aClass) {
+	public static Generator get(Class aClass) {
 
 		if (!isInitialized) {
-			synchronized (FactoryRepository.class) {
+			synchronized (GeneratorRepository.class) {
 				if (!isInitialized) {
 					initialize();
 					isInitialized = true;
@@ -22,7 +22,7 @@ public class FactoryRepository {
 			}
 		}
 
-		DataFactory factory = factories.get(aClass);
+		Generator factory = factories.get(aClass);
 		if (factory == null) {
 			throw new UnsupportedOperationException("Factory not found for type [Type=" + aClass + "]");
 		} else {
@@ -34,7 +34,7 @@ public class FactoryRepository {
 		// Framework classes
 
 		// Model Classes
-		factories.put(Manga.class, new MangaTestSuite());
+		factories.put(Manga.class, new MangaGenerator());
 
 		//Test Classes
 	}

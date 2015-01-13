@@ -69,6 +69,10 @@ public class RESTError {
 		return code;
 	}
 
+	public int getHttpStatus() {
+		return httpStatus;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}

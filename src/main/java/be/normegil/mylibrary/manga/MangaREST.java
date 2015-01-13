@@ -1,8 +1,9 @@
 package be.normegil.mylibrary.manga;
 
 import be.normegil.mylibrary.ApplicationProperties;
+import be.normegil.mylibrary.util.URIHelper;
 import be.normegil.mylibrary.util.Updatable;
-import be.normegil.mylibrary.util.exception.IllegalArgumentWebAppException;
+import be.normegil.mylibrary.util.exception.WebApplicationException;
 import be.normegil.mylibrary.util.rest.CollectionResource;
 import be.normegil.mylibrary.util.rest.HttpStatus;
 import be.normegil.mylibrary.util.rest.RESTHelper;
@@ -30,10 +31,15 @@ public class MangaREST implements RESTService<Manga> {
 	@Inject
 	private MangaDatabaseDAO dao;
 
+	@Inject
+	private URIHelper uriHelper;
+
+	@Inject
+	private RESTHelper restHelper;
+
 	@Override
 	public Response getAll(@Context final UriInfo info, @QueryParam("offset") final Long requestOffset, @QueryParam("limit") final Integer requestLimit) {
-		RESTHelper helper = new RESTHelper();
-		URI baseUri = helper.removeParameters(info.getRequestUri());
+		URI baseUri = uriHelper.removeParameters(info.getRequestUri());
 		long offset = requestOffset == null ? 0L : requestOffset;
 		int limit = requestLimit == null ? ApplicationProperties.REST.DEFAULT_LIMIT : requestLimit;
 
@@ -44,7 +50,7 @@ public class MangaREST implements RESTService<Manga> {
 				.setLimit(limit)
 				.setTotalNumberOfItems(dao.getNumberOfElements())
 				.setBaseURI(baseUri)
-				.addAllItems(helper.toUri(info.getBaseUri(), entities));
+				.addAllItems(restHelper.toUri(info.getBaseUri(), entities));
 		return Response.ok(collectionResourceBuilder.build()).build();
 	}
 
@@ -52,7 +58,7 @@ public class MangaREST implements RESTService<Manga> {
 	public Response get(@Context final UriInfo info, @PathParam("ID") final UUID id) {
 		Optional<Manga> optionalManga = dao.get(id);
 		if (!optionalManga.isPresent()) {
-			throw new IllegalArgumentWebAppException(ErrorCode.OBJECT_NOT_FOUND, "Object not found [ID=" + id.toString() + "]");
+			throw new WebApplicationException(ErrorCode.OBJECT_NOT_FOUND, new IllegalArgumentException("Object not found [ID=" + id.toString() + "]"));
 		}
 		Manga.Digest digest = new Manga.Digest();
 		digest.fromBase(info.getBaseUri(), optionalManga.get());
@@ -63,11 +69,10 @@ public class MangaREST implements RESTService<Manga> {
 	public Response create(@Context final UriInfo info, final Manga entity) {
 		dao.persist(entity);
 
-		RESTHelper helper = new RESTHelper();
-		URI baseUri = helper.removeParameters(info.getRequestUri());
+		URI baseUri = uriHelper.removeParameters(info.getRequestUri());
 
 		return Response.status(HttpStatus.CREATED.value())
-				.location(helper.toUri(baseUri, entity))
+				.location(restHelper.toUri(baseUri, entity))
 				.build();
 	}
 
@@ -92,7 +97,7 @@ public class MangaREST implements RESTService<Manga> {
 
 		Optional<Manga> optionalManga = dao.get(id);
 		if (!optionalManga.isPresent()) {
-			throw new IllegalArgumentWebAppException(ErrorCode.OBJECT_NOT_FOUND, "Object not found [ID=" + id.toString() + "]");
+			throw new WebApplicationException(ErrorCode.OBJECT_NOT_FOUND, new IllegalArgumentException("Object not found [ID=" + id.toString() + "]"));
 		}
 
 		dao.remove(optionalManga.get());
@@ -101,11 +106,11 @@ public class MangaREST implements RESTService<Manga> {
 
 	private Response update(UUID id, Consumer<Updatable> consumer) {
 		if (id == null) {
-			throw new IllegalArgumentWebAppException(ErrorCode.ID_NULL, "Path ID should not be null");
+			throw new WebApplicationException(ErrorCode.ID_NULL, new IllegalArgumentException("Path ID should not be null"));
 		}
 		Optional<Manga> optional = dao.get(id);
 		if (!optional.isPresent()) {
-			throw new IllegalArgumentWebAppException(ErrorCode.OBJECT_NOT_FOUND, "Object not found [ID=" + id.toString() + "]");
+			throw new WebApplicationException(ErrorCode.OBJECT_NOT_FOUND, new IllegalArgumentException("Object not found [ID=" + id.toString() + "]"));
 		}
 		Manga manga = optional.get();
 
