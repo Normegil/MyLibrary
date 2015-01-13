@@ -8,7 +8,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		ConstraintPackageTestSuite.class,
-		DAOPackageTestSuite.class
+		DAOPackageTestSuite.class,
+
+		CoupleTestSuite.class
 })
 public class FrameworkPackageTestSuite {
 }

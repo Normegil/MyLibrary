@@ -1,11 +1,13 @@
 package be.normegil.mylibrary.framework;
 
+import javax.validation.constraints.NotNull;
+
 public class Couple<X, Y> {
 
 	private final X x;
 	private final Y y;
 
-	public Couple(final X x, final Y y) {
+	public Couple(@NotNull final X x, @NotNull final Y y) {
 		this.x = x;
 		this.y = y;
 	}
