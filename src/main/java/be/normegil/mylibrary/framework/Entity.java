@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAttribute;
 import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 @MappedSuperclass
@@ -26,8 +27,8 @@ public abstract class Entity {
 	@XmlAttribute
 	private UUID id;
 
-	public UUID getId() {
-		return id;
+	public Optional<UUID> getId() {
+		return Optional.ofNullable(id);
 	}
 
 	@Override

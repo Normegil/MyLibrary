@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
 		DAOPackageTestSuite.class,
 
 		CoupleTestSuite.class,
-		DateHelperTestSuite.class
+		DateHelperTestSuite.class,
+		EntityTestSuite.class
 })
 public class FrameworkPackageTestSuite {
 }
