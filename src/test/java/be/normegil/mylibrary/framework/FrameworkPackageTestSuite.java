@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 		ConstraintPackageTestSuite.class,
 		DAOPackageTestSuite.class,
 
-		CoupleTestSuite.class
+		CoupleTestSuite.class,
+		DateHelperTestSuite.class
 })
 public class FrameworkPackageTestSuite {
 }
