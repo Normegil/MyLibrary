@@ -3,6 +3,7 @@ package be.normegil.mylibrary.framework.rest.error;
 import be.normegil.mylibrary.framework.exception.ErrorNotFoundException;
 import be.normegil.mylibrary.framework.exception.WebApplicationException;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
@@ -15,8 +16,6 @@ import java.util.Optional;
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 
 	public static final int DEFAULT_ERROR_CODE = 50000;
-	@Inject
-	private transient Logger log;
 
 	@Override
 	public Response toResponse(final Throwable throwable) {
