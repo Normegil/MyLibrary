@@ -12,7 +12,8 @@ import org.junit.runners.Suite;
 
 		CoupleTestSuite.class,
 		DateHelperTestSuite.class,
-		EntityTestSuite.class
+		EntityTestSuite.class,
+		NumbersHelperTestSuite.class
 })
 public class FrameworkPackageTestSuite {
 }

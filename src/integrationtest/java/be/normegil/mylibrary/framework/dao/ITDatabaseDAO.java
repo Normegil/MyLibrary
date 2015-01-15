@@ -51,7 +51,7 @@ public class ITDatabaseDAO {
 		};
 		new DAOHelper().setEntityManager(dao, entityManager);
 
-		entity = insertDataInDatabase();
+//		entity = insertDataInDatabase();
 	}
 
 	@After
@@ -67,130 +67,130 @@ public class ITDatabaseDAO {
 		entityManagerFactory = null;
 	}
 
-	@Test
-	public void testGetAll() throws Exception {
-		List<Manga> completeList = insertDatas(ApplicationProperties.REST.DEFAULT_LIMIT + 10);
-		completeList.add(entity);
-		Collections.sort(completeList, (o1, o2) -> new CompareToBuilder().append(o1.getName(), o2.getName()).toComparison());
-
-		List<Manga> expected = get(completeList, DEFAULT_OFFSET, ApplicationProperties.REST.DEFAULT_LIMIT);
-		Stream<Manga> toTest = dao.getAll();
-		List<Manga> toTestAsList = toTest.collect(Collectors.toCollection(ArrayList::new));
-		assertTrue(getErrorMessage(expected, toTestAsList),
-				CollectionUtils.isEqualCollection(expected, toTestAsList));
-	}
-
-	@Test
-	public void testGetAll_OffsetAndLimit() throws Exception {
-		int offset = 2;
-		int limit = 3;
-
-		List<Manga> completeList = insertDatas(ApplicationProperties.REST.DEFAULT_LIMIT + 10);
-		completeList.add(entity);
-		Collections.sort(completeList, (o1, o2) -> new CompareToBuilder().append(o1.getName(), o2.getName()).toComparison());
-
-		List<Manga> expected = get(completeList, offset, limit);
-		Stream<Manga> toTest = dao.getAll(offset, limit);
-		List<Manga> toTestAsList = toTest.collect(Collectors.toCollection(ArrayList::new));
-		assertTrue(getErrorMessage(expected, toTestAsList),
-				CollectionUtils.isEqualCollection(expected, toTestAsList));
-	}
-
-	@Test
-	public void testGetNumberOfElements() throws Exception {
-		Object result = entityManager.createQuery("select count(e.id) from " + entity.getClass().getName() + " e").getSingleResult();
-		long numberOfElements = dao.getNumberOfElements();
-		assertEquals(result, numberOfElements);
-	}
-
-	@Test
-	public void testGet() throws Exception {
-		Optional optional = dao.get(entity.getId());
-		Entity foundEntity = (Entity) optional.get();
-		assertEquals(entity, foundEntity);
-	}
-
-	@Test
-	public void testSave_AlreadyExistingObject() throws Exception {
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		Optional optional = dao.get(entity.getId());
-		Manga loadedEntity = (Manga) optional.get();
-		loadedEntity.setName(ALTERNATIVE_TITLE);
-		dao.persist(loadedEntity);
-		transaction.commit();
-
-		Optional otherOptional = dao.get(entity.getId());
-		Manga foundEntity = (Manga) otherOptional.get();
-		assertEquals(ALTERNATIVE_TITLE, foundEntity.getName());
-	}
-
-	@Test
-	public void testSave() throws Exception {
-		Entity newEntity = FACTORY.getNew(true, false);
-
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		dao.persist(newEntity);
-		transaction.commit();
-
-		Optional optional = dao.get(newEntity.getId());
-		Entity foundEntity = (Entity) optional.get();
-		assertEquals(newEntity, foundEntity);
-	}
-
-	@Test
-	public void testRemove() throws Exception {
-		Object entityId = entity.getId();
-
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		Optional optional = dao.get(entityId);
-		Manga loadedEntity = (Manga) optional.get();
-		dao.remove(loadedEntity);
-		transaction.commit();
-
-		assertNull(dao.get(entityId));
-	}
-
-	private List<Manga> insertDatas(long numberOfElements) {
-		if (numberOfElements < 1) {
-			throw new IllegalArgumentException("Not enough Elements");
-		} else {
-			List<Manga> mangas = new ArrayList<>();
-			mangas.add(insertDataInDatabase());
-			if (numberOfElements > 1) {
-				mangas.addAll(insertDatas(numberOfElements - 1));
-			}
-			return mangas;
-		}
-	}
-
-	private Manga insertDataInDatabase() {
-		EntityManager manager = entityManagerFactory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
-		transaction.begin();
-		Manga entity = FACTORY.getNew(true, false);
-		manager.persist(entity);
-		transaction.commit();
-		manager.close();
-		return entity;
-	}
-
-	private List<Manga> get(final List<Manga> completeList, int offset, int limit) {
-		List<Manga> expected = new ArrayList<>();
-		for (int i = offset; i < limit + offset; i++) {
-			expected.add(completeList.get(i));
-		}
-		return expected;
-	}
-
-	private String getErrorMessage(List<Manga> expected, List<Manga> toTest) {
-		String expectedSting = expected.stream().map(Manga::getName)
-				.collect(Collectors.joining(", "));
-		String toTestString = toTest.stream().map(Manga::getName)
-				.collect(Collectors.joining(", "));
-		return "Entitys Defined[" + expectedSting + "]\n" +
-				"Entitys Loaded[" + toTestString + "]";
-	}
+//	@Test
+//	public void testGetAll() throws Exception {
+//		List<Manga> completeList = insertDatas(ApplicationProperties.REST.DEFAULT_LIMIT + 10);
+//		completeList.add(entity);
+//		Collections.sort(completeList, (o1, o2) -> new CompareToBuilder().append(o1.getName(), o2.getName()).toComparison());
+//
+//		List<Manga> expected = get(completeList, DEFAULT_OFFSET, ApplicationProperties.REST.DEFAULT_LIMIT);
+//		Stream<Manga> toTest = dao.getAll();
+//		List<Manga> toTestAsList = toTest.collect(Collectors.toCollection(ArrayList::new));
+//		assertTrue(getErrorMessage(expected, toTestAsList),
+//				CollectionUtils.isEqualCollection(expected, toTestAsList));
+//	}
+//
+//	@Test
+//	public void testGetAll_OffsetAndLimit() throws Exception {
+//		int offset = 2;
+//		int limit = 3;
+//
+//		List<Manga> completeList = insertDatas(ApplicationProperties.REST.DEFAULT_LIMIT + 10);
+//		completeList.add(entity);
+//		Collections.sort(completeList, (o1, o2) -> new CompareToBuilder().append(o1.getName(), o2.getName()).toComparison());
+//
+//		List<Manga> expected = get(completeList, offset, limit);
+//		Stream<Manga> toTest = dao.getAll(offset, limit);
+//		List<Manga> toTestAsList = toTest.collect(Collectors.toCollection(ArrayList::new));
+//		assertTrue(getErrorMessage(expected, toTestAsList),
+//				CollectionUtils.isEqualCollection(expected, toTestAsList));
+//	}
+//
+//	@Test
+//	public void testGetNumberOfElements() throws Exception {
+//		Object result = entityManager.createQuery("select count(e.id) from " + entity.getClass().getName() + " e").getSingleResult();
+//		long numberOfElements = dao.getNumberOfElements();
+//		assertEquals(result, numberOfElements);
+//	}
+//
+//	@Test
+//	public void testGet() throws Exception {
+//		Optional optional = dao.get(entity.getId());
+//		Entity foundEntity = (Entity) optional.get();
+//		assertEquals(entity, foundEntity);
+//	}
+//
+//	@Test
+//	public void testSave_AlreadyExistingObject() throws Exception {
+//		EntityTransaction transaction = entityManager.getTransaction();
+//		transaction.begin();
+//		Optional optional = dao.get(entity.getId());
+//		Manga loadedEntity = (Manga) optional.get();
+//		loadedEntity.setName(ALTERNATIVE_TITLE);
+//		dao.persist(loadedEntity);
+//		transaction.commit();
+//
+//		Optional otherOptional = dao.get(entity.getId());
+//		Manga foundEntity = (Manga) otherOptional.get();
+//		assertEquals(ALTERNATIVE_TITLE, foundEntity.getName());
+//	}
+//
+//	@Test
+//	public void testSave() throws Exception {
+//		Entity newEntity = FACTORY.getNew(true, false);
+//
+//		EntityTransaction transaction = entityManager.getTransaction();
+//		transaction.begin();
+//		dao.persist(newEntity);
+//		transaction.commit();
+//
+//		Optional optional = dao.get(newEntity.getId());
+//		Entity foundEntity = (Entity) optional.get();
+//		assertEquals(newEntity, foundEntity);
+//	}
+//
+//	@Test
+//	public void testRemove() throws Exception {
+//		Object entityId = entity.getId();
+//
+//		EntityTransaction transaction = entityManager.getTransaction();
+//		transaction.begin();
+//		Optional optional = dao.get(entityId);
+//		Manga loadedEntity = (Manga) optional.get();
+//		dao.remove(loadedEntity);
+//		transaction.commit();
+//
+//		assertNull(dao.get(entityId));
+//	}
+//
+//	private List<Manga> insertDatas(long numberOfElements) {
+//		if (numberOfElements < 1) {
+//			throw new IllegalArgumentException("Not enough Elements");
+//		} else {
+//			List<Manga> mangas = new ArrayList<>();
+//			mangas.add(insertDataInDatabase());
+//			if (numberOfElements > 1) {
+//				mangas.addAll(insertDatas(numberOfElements - 1));
+//			}
+//			return mangas;
+//		}
+//	}
+//
+//	private Manga insertDataInDatabase() {
+//		EntityManager manager = entityManagerFactory.createEntityManager();
+//		EntityTransaction transaction = manager.getTransaction();
+//		transaction.begin();
+//		Manga entity = FACTORY.getNew(true, false);
+//		manager.persist(entity);
+//		transaction.commit();
+//		manager.close();
+//		return entity;
+//	}
+//
+//	private List<Manga> get(final List<Manga> completeList, int offset, int limit) {
+//		List<Manga> expected = new ArrayList<>();
+//		for (int i = offset; i < limit + offset; i++) {
+//			expected.add(completeList.get(i));
+//		}
+//		return expected;
+//	}
+//
+//	private String getErrorMessage(List<Manga> expected, List<Manga> toTest) {
+//		String expectedSting = expected.stream().map(Manga::getName)
+//				.collect(Collectors.joining(", "));
+//		String toTestString = toTest.stream().map(Manga::getName)
+//				.collect(Collectors.joining(", "));
+//		return "Entitys Defined[" + expectedSting + "]\n" +
+//				"Entitys Loaded[" + toTestString + "]";
+//	}
 }

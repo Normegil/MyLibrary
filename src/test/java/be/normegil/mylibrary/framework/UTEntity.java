@@ -1,5 +1,6 @@
 package be.normegil.mylibrary.framework;
 
+import be.normegil.mylibrary.manga.Manga;
 import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.fake.FakeEntity;
 import be.normegil.mylibrary.tools.generator.MangaGenerator;
@@ -54,7 +55,9 @@ public class UTEntity {
 
 	@Test
 	public void testEquality_DifferentObject() throws Exception {
-		assertFalse(entity.equals(new MangaGenerator().getDefault(false, false)));
+		Manga manga = new MangaGenerator().getDefault(false, false);
+		new EntityHelper().setId(manga, entity.getId().get());
+		assertFalse(entity.equals(manga));
 	}
 
 	@Test

@@ -11,6 +11,16 @@ import java.util.UUID;
 
 public class FakeEntity extends Entity {
 
+	@Override
+	public boolean equals(final Object obj) {
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
 	@Path("/fakeentities")
 	public static class RestService implements RESTService<FakeEntity> {
 		@Override
