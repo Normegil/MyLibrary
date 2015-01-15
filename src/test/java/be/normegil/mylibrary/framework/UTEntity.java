@@ -1,6 +1,7 @@
 package be.normegil.mylibrary.framework;
 
 import be.normegil.mylibrary.tools.EntityHelper;
+import be.normegil.mylibrary.tools.fake.FakeEntity;
 import be.normegil.mylibrary.tools.generator.MangaGenerator;
 import org.junit.After;
 import org.junit.Before;
@@ -19,8 +20,7 @@ public class UTEntity {
 
 	@Before
 	public void setUp() throws Exception {
-		entity = new Entity() {
-		};
+		entity = new FakeEntity();
 		new EntityHelper().setId(entity, DEFAULT_ID);
 	}
 
@@ -54,40 +54,38 @@ public class UTEntity {
 
 	@Test
 	public void testEquality_DifferentObject() throws Exception {
-		assertTrue(entity.equals(new MangaGenerator().getDefault(false, false)));
+		assertFalse(entity.equals(new MangaGenerator().getDefault(false, false)));
 	}
 
 	@Test
 	public void testEquality_NullIDs() throws Exception {
 		new EntityHelper().setId(entity, null);
-		Entity newEntity = new Entity() {
-		};
+		Entity newEntity = new FakeEntity();
 		assertTrue(entity.equals(newEntity));
 	}
 
 	@Test
 	public void testEquality_SameIDs() throws Exception {
-		Entity newEntity = new Entity() {
-		};
+		Entity newEntity = new FakeEntity();
 		new EntityHelper().setId(newEntity, entity.getId().get());
 		assertTrue(entity.equals(newEntity));
 	}
 
 	@Test
 	public void testEquality_DifferentIDs() throws Exception {
-		Entity newEntity = new Entity() {
-		};
+		Entity newEntity = new FakeEntity();
 		new EntityHelper().setId(newEntity, ALTERNATIVE_ID);
 		assertFalse(entity.equals(newEntity));
 	}
 
 	@Test
 	public void testHashcode_NullID() throws Exception {
-		assertEquals(0, entity.hashCode());
+		new EntityHelper().setId(entity, null);
+		assertEquals(629, entity.hashCode());
 	}
 
 	@Test
 	public void testHashcode() throws Exception {
-		assertEquals(0, entity.hashCode());
+		assertEquals(889977111, entity.hashCode());
 	}
 }

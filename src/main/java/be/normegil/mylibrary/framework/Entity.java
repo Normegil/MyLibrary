@@ -3,6 +3,7 @@ package be.normegil.mylibrary.framework;
 import be.normegil.mylibrary.framework.constraint.ExistingID;
 import be.normegil.mylibrary.framework.constraint.URIWithID;
 import be.normegil.mylibrary.framework.rest.RESTHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.GenericGenerator;
@@ -57,12 +58,14 @@ public abstract class Entity {
 
 	public abstract static class Digest {
 
+		public static final String PATH_SEPARATOR = "/";
 		@NotNull
 		@URIWithID
 		protected URI href;
 
-		public Entity toBase() {
-			throw new UnsupportedOperationException();
+		protected void toBase(Entity entity) {
+			String id = StringUtils.substringAfterLast(href.toString(), PATH_SEPARATOR);
+			entity.id = UUID.fromString(id);
 		}
 
 		protected void fromBase(@NotNull final URI baseUri, @NotNull @ExistingID final Entity entity) {

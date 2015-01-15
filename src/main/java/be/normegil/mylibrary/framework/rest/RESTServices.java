@@ -1,23 +1,36 @@
 package be.normegil.mylibrary.framework.rest;
 
-import be.normegil.mylibrary.manga.MangaREST;
+import be.normegil.mylibrary.framework.exception.IllegalAccessRuntimeException;
+import be.normegil.mylibrary.framework.exception.InstantiationRuntimeException;
 import be.normegil.mylibrary.framework.exception.RESTServiceNotFoundException;
+import org.reflections.Reflections;
 
 import javax.enterprise.inject.Default;
 import javax.ws.rs.Path;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RESTServices {
 
 	public static final String PATH_SEPARATOR = "/";
-	private Set<RESTService> restServices = new HashSet<>();
+	private static final Set<RESTService> restServices = new HashSet<>();
+	static {
+		Reflections reflections = new Reflections();
+		Set<Class<? extends RESTService>> subTypes = reflections.getSubTypesOf(RESTService.class);
 
-	public RESTServices() {
-		restServices.addAll(Arrays.asList(
-				new MangaREST()
-		));
+		for (Class<? extends RESTService> subType : subTypes) {
+			try {
+				restServices.add(subType.newInstance());
+			} catch (InstantiationException e) {
+				throw new InstantiationRuntimeException(e);
+			} catch (IllegalAccessException e) {
+				throw new IllegalAccessRuntimeException(e);
+			}
+		}
 	}
 
 	public String getPathForResourceType(final Class aClass) {

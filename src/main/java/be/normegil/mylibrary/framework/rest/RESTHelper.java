@@ -45,7 +45,12 @@ public class RESTHelper {
 			baseUriAsString += PATH_SEPARATOR;
 		}
 
-		return URI.create(baseUriAsString + new RESTServices().getPathForResourceType(entity.getClass()) + PATH_SEPARATOR + entity.getId());
+		Optional<UUID> idOptional = entity.getId();
+		if (idOptional.isPresent()) {
+			return URI.create(baseUriAsString + new RESTServices().getPathForResourceType(entity.getClass()) + PATH_SEPARATOR + idOptional.get());
+		} else {
+			return null;
+		}
 	}
 
 	public UUID toUUID(@NotNull @URIWithID final URI uri) {
