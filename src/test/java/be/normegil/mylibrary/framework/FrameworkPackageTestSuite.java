@@ -13,7 +13,8 @@ import org.junit.runners.Suite;
 		CoupleTestSuite.class,
 		DateHelperTestSuite.class,
 		EntityTestSuite.class,
-		NumbersHelperTestSuite.class
+		NumbersHelperTestSuite.class,
+		URIHelper.class
 })
 public class FrameworkPackageTestSuite {
 }
