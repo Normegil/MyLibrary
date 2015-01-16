@@ -8,6 +8,7 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,5 +56,12 @@ public class SpecificResourceDatabaseDAO extends DatabaseDAO<SpecificResource> {
 	@Override
 	protected Class<SpecificResource> getEntityClass() {
 		return SpecificResource.class;
+	}
+
+	@Override
+	protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<SpecificResource> root) {
+		return Arrays.asList(
+				builder.asc(root.get("ressourceID"))
+		);
 	}
 }

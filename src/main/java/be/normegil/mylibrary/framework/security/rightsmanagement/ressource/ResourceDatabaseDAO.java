@@ -5,13 +5,12 @@ import be.normegil.mylibrary.framework.rest.RESTService;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Stateless
@@ -19,6 +18,13 @@ public class ResourceDatabaseDAO extends DatabaseDAO<Resource> {
 	@Override
 	protected Class<Resource> getEntityClass() {
 		return Resource.class;
+	}
+
+	@Override
+	protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<Resource> root) {
+		return Arrays.asList(
+				builder.asc(root.get("restService"))
+		);
 	}
 
 	public ResourceDatabaseDAO() {

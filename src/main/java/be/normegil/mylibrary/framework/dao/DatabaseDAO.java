@@ -2,13 +2,17 @@ package be.normegil.mylibrary.framework.dao;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.framework.NumbersHelper;
+import be.normegil.mylibrary.framework.constraint.NotOptional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -20,7 +24,7 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 	protected DatabaseDAO() {
 	}
 
-	protected DatabaseDAO(final EntityManager entityManager) {
+	protected DatabaseDAO(@NotNull final EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 
@@ -45,7 +49,7 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 				.getResultList().stream();
 	}
 
-	public Optional<E> get(@NotNull final Object id) {
+	public Optional<E> get(@NotNull @NotOptional final Object id) {
 		return Optional.ofNullable(entityManager.find(getEntityClass(), id));
 	}
 
@@ -61,6 +65,8 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 
 	protected abstract Class<E> getEntityClass();
 
+	protected abstract List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<E> root);
+
 	protected EntityManager getEntityManager() {
 		return entityManager;
 	}
@@ -72,7 +78,8 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 	private CriteriaQuery<E> getQuery() {
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<E> query = builder.createQuery(getEntityClass());
-		query.from(getEntityClass());
+		Root<E> root = query.from(getEntityClass());
+		query.orderBy(getOrderByParameters(builder, root));
 		return query;
 	}
 }

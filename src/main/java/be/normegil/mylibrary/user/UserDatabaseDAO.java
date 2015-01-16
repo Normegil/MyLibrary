@@ -10,6 +10,8 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Stateless
@@ -40,6 +42,13 @@ public class UserDatabaseDAO extends DatabaseDAO<User> {
 	@Override
 	protected Class<User> getEntityClass() {
 		return User.class;
+	}
+
+	@Override
+	protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<User> root) {
+		return Arrays.asList(
+				builder.asc(root.get("pseudo"))
+		);
 	}
 
 	private CriteriaQuery<User> getSelectUserByPseudoQuery(final String pseudo) {

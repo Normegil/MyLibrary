@@ -34,7 +34,7 @@ public class MangaGenerator implements Generator<Manga> {
 			new EntityHelper().setId(manga, UUID.randomUUID());
 		}
 
-		return null;
+		return manga;
 	}
 
 	public synchronized long getIndex() {

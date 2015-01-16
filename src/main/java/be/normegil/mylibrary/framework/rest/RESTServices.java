@@ -4,6 +4,8 @@ import be.normegil.mylibrary.framework.exception.IllegalAccessRuntimeException;
 import be.normegil.mylibrary.framework.exception.InstantiationRuntimeException;
 import be.normegil.mylibrary.framework.exception.RESTServiceNotFoundException;
 import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.enterprise.inject.Default;
 import javax.ws.rs.Path;
@@ -17,14 +19,18 @@ import java.util.stream.Stream;
 public class RESTServices {
 
 	public static final String PATH_SEPARATOR = "/";
+	private static final Logger LOG = LoggerFactory.getLogger(RESTServices.class);
 	private static final Set<RESTService> restServices = new HashSet<>();
+
 	static {
-		Reflections reflections = new Reflections();
+		Reflections reflections = new Reflections("be.normegil");
 		Set<Class<? extends RESTService>> subTypes = reflections.getSubTypesOf(RESTService.class);
 
 		for (Class<? extends RESTService> subType : subTypes) {
 			try {
-				restServices.add(subType.newInstance());
+				RESTService restService = subType.newInstance();
+				restServices.add(restService);
+				LOG.info("RestService found : " + restService.getClass().getSimpleName() + "[" + restService.getSupportedClass().getSimpleName() + "]");
 			} catch (InstantiationException e) {
 				throw new InstantiationRuntimeException(e);
 			} catch (IllegalAccessException e) {

@@ -14,6 +14,8 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Stateless
@@ -29,6 +31,14 @@ public class RightDatabaseDAO extends DatabaseDAO<Right> {
 	@Override
 	protected Class<Right> getEntityClass() {
 		return Right.class;
+	}
+
+	@Override
+	protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<Right> root) {
+		return Arrays.asList(
+				builder.asc(root.get("resource")),
+				builder.asc(root.get("method"))
+		);
 	}
 
 	public Optional<Right> get(final Group group, final Resource resource, final RESTMethod method) {

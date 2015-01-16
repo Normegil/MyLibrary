@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,13 @@ public class KeyDatabaseDAO extends DatabaseDAO<Key> {
 	@Override
 	protected Class<Key> getEntityClass() {
 		return Key.class;
+	}
+
+	@Override
+	protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<Key> root) {
+		return Arrays.asList(
+				builder.asc(root.get("name"))
+		);
 	}
 
 	public Optional<Key> getByName(@NotEmpty String name) {

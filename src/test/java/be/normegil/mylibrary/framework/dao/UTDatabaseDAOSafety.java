@@ -7,7 +7,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Root;
 import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 public class UTDatabaseDAOSafety {
 
@@ -21,12 +26,24 @@ public class UTDatabaseDAOSafety {
 			protected Class<Manga> getEntityClass() {
 				return Manga.class;
 			}
+
+			@Override
+			protected List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<Manga> root) {
+				return Arrays.asList(
+						builder.asc(root.get("name"))
+				);
+			}
 		};
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		entity = null;
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void testConstructor_NullEntityManager() throws Exception {
+		Validator.validate(CLASS.getConstructor(EntityManager.class), new Object[]{null});
 	}
 
 	@Test(expected = ConstraintViolationException.class)
@@ -42,5 +59,10 @@ public class UTDatabaseDAOSafety {
 	@Test(expected = ConstraintViolationException.class)
 	public void testRemove_Null() throws Exception {
 		Validator.validate(entity, CLASS.getMethod("remove", Object.class), new Object[]{null});
+	}
+
+	@Test(expected = ConstraintViolationException.class)
+	public void testGet_OptionalObject() throws Exception {
+		Validator.validate(entity, CLASS.getMethod("get", Object.class), Optional.of(UUID.randomUUID()));
 	}
 }

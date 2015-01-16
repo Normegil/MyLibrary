@@ -10,5 +10,5 @@ import org.junit.runners.Suite;
 		MangaPackageTestSuite.class,
 		DAOPackageTestSuite.class
 })
-public class TestMyLibrary {
+public class MyLibraryTestSuite {
 }
