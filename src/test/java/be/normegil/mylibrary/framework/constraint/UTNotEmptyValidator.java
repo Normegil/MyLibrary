@@ -10,6 +10,7 @@ public class UTNotEmptyValidator {
 
 	private static final String EMPTY_STRING = "";
 	private static final String NOT_EMPTY_STRING = "Test";
+	public static final String SPACE_STRING = "    ";
 	private NotEmptyValidator entity = new NotEmptyValidator();
 	private ConstraintValidatorContextImpl context = new ConstraintValidatorContextImpl(null, null, null);
 
@@ -21,6 +22,11 @@ public class UTNotEmptyValidator {
 	@Test
 	public void testEmpty() throws Exception {
 		assertFalse(entity.isValid(EMPTY_STRING, context));
+	}
+
+	@Test
+	public void testSpaceOnly() throws Exception {
+		assertFalse(entity.isValid(SPACE_STRING, context));
 	}
 
 	@Test

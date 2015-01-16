@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 public @interface ExistingID {
 
 	String message() default
-			"Given argument has a null ID";
+			"Given argument is null/has a null ID";
 
 	Class<?>[] groups() default {};
 

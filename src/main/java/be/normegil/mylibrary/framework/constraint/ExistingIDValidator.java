@@ -13,6 +13,6 @@ public class ExistingIDValidator implements ConstraintValidator<ExistingID, Enti
 
 	@Override
 	public boolean isValid(final Entity value, final ConstraintValidatorContext context) {
-		return value == null || value.getId() != null;
+		return value != null && value.getId().isPresent();
 	}
 }
