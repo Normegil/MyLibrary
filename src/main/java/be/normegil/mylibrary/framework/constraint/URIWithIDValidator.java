@@ -17,8 +17,8 @@ public class URIWithIDValidator implements ConstraintValidator<URIWithID, URI> {
 		if (value != null) {
 			String id = StringUtils.substringAfterLast(value.toString(), "/");
 			try {
-				UUID uuid = UUID.fromString(id);
-				return uuid != null;
+				UUID.fromString(id);
+				return true;
 			} catch (IllegalArgumentException e) {
 				return false;
 			}

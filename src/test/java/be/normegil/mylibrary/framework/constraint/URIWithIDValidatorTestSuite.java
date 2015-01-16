@@ -5,9 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		ExistingIDTestSuite.class,
-		NotEmptyValidatorTestSuite.class,
-		URIWithIDValidatorTestSuite.class
+		UTURIWithIDValidator.class
 })
-public class ConstraintPackageTestSuite {
+public class URIWithIDValidatorTestSuite {
 }
