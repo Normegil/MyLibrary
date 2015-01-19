@@ -1,8 +1,8 @@
 package be.normegil.mylibrary.framework.security.rightsmanagement.group;
 
-import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.framework.Entity;
 import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.user.User;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -24,7 +24,7 @@ public class Group extends Entity {
 	@ManyToMany
 	private List<User> users = new ArrayList<>();
 
-	public Group(final String name) {
+	public Group(@NotNull @NotEmpty final String name) {
 		this.name = name;
 	}
 

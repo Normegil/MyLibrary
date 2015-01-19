@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		GroupTestSuite.class,
-		GroupDatabaseDAOTestSuite.class
+		UTGroupSafety.class,
+		UTGroup.class
 })
-public class GroupPackageTestSuite {
+public class GroupTestSuite {
 }
