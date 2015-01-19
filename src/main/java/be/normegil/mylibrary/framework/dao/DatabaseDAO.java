@@ -65,7 +65,7 @@ public abstract class DatabaseDAO<E> implements DAO<E> {
 
 	protected abstract Class<E> getEntityClass();
 
-	protected abstract List<Order> getOrderByParameters(final CriteriaBuilder builder, final Root<E> root);
+	protected abstract List<Order> getOrderByParameters(@NotNull final CriteriaBuilder builder, @NotNull final Root<E> root);
 
 	protected EntityManager getEntityManager() {
 		return entityManager;
