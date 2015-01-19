@@ -15,13 +15,17 @@ public class LocalDateTimeJsonSerializer extends JsonSerializer<LocalDateTime> {
 
 	@Override
 	public void serialize(final LocalDateTime time, final JsonGenerator jgen, final SerializerProvider provider) throws IOException, JsonProcessingException {
-		String toWrite;
-		if (time != null) {
-			toWrite = helper.format(time);
+		if (jgen == null) {
+			throw new IllegalArgumentException("JsonGenerator should not be null");
 		} else {
-			toWrite = "";
-		}
+			String toWrite;
+			if (time != null) {
+				toWrite = helper.format(time);
+			} else {
+				toWrite = "";
+			}
 
-		jgen.writeString(toWrite);
+			jgen.writeString(toWrite);
+		}
 	}
 }
