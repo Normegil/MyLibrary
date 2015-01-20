@@ -6,7 +6,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		AdapterPackageTestSuite.class
+		AdapterPackageTestSuite.class,
+
+		CsvParserTestSuite.class
 })
 public class ParserPackageTestSuite {
 }
