@@ -37,6 +37,11 @@ public class MangaGenerator implements Generator<Manga> {
 		return manga;
 	}
 
+	@Override
+	public Class<Manga> getSupportedClass() {
+		return Manga.class;
+	}
+
 	public synchronized long getIndex() {
 		index += 1;
 		return index;

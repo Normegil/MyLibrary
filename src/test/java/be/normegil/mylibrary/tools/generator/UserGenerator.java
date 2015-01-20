@@ -38,7 +38,7 @@ public class UserGenerator implements Generator<User> {
 		User user = new User();
 		user.setPseudo(PSEUDO + index);
 		user.setHashedPassword(HASHED_PASSWORD + index);
-		for(long l = 0L;l < DEFAULT_GROUPS_SIZE & withLink ; l++) {
+		for (long l = 0L; l < DEFAULT_GROUPS_SIZE & withLink; l++) {
 			Group group = GROUP_GENERATOR.getNew(false, withIds);
 			user.addGroup(group);
 			group.addUser(user);
@@ -48,5 +48,10 @@ public class UserGenerator implements Generator<User> {
 		}
 		index++;
 		return user;
+	}
+
+	@Override
+	public Class<User> getSupportedClass() {
+		return User.class;
 	}
 }

@@ -55,6 +55,9 @@ public class User extends Entity implements Updatable<User> {
 
 	public void addGroup(@NotNull final Group group) {
 		groups.add(group);
+		if (!group.getUsers().contains(this)) {
+			group.addUser(this);
+		}
 	}
 
 	public void removeAllGroups(@NotNull final Collection<Group> groups) {
@@ -65,6 +68,9 @@ public class User extends Entity implements Updatable<User> {
 
 	public void removeGroup(@NotNull final Group group) {
 		groups.remove(group);
+		if (group.getUsers().contains(this)) {
+			group.removeUser(this);
+		}
 	}
 
 	@Override

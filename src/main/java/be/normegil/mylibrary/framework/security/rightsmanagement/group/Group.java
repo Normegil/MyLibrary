@@ -48,6 +48,9 @@ public class Group extends Entity {
 
 	public void addUser(@NotNull final User user) {
 		users.add(user);
+		if (!user.getGroups().contains(this)) {
+			user.addGroup(this);
+		}
 	}
 
 	public void removeAllUsers(@NotNull final Collection<User> users) {
@@ -58,5 +61,8 @@ public class Group extends Entity {
 
 	public void removeUser(@NotNull final User user) {
 		users.remove(user);
+		if (user.getGroups().contains(this)) {
+			user.removeGroup(this);
+		}
 	}
 }

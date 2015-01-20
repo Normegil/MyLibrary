@@ -44,4 +44,9 @@ public class GroupGenerator implements Generator<Group> {
 		index++;
 		return group;
 	}
+
+	@Override
+	public Class<Group> getSupportedClass() {
+		return Group.class;
+	}
 }
