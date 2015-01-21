@@ -6,7 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		UTCsvParserSafety.class,
-		UTCsvParser.class
+		UTBaseCsvParser.class,
+		UTCsvParserWithAnnotatedObject.class
 })
 public class CsvParserTestSuite {
 }

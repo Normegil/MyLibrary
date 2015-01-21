@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CsvParser<E> {
@@ -25,10 +26,7 @@ public class CsvParser<E> {
 	}
 
 	public List<E> from(@NotNull final InputStream stream) {
-		CsvMapper mapper = new CsvMapper();
-		com.fasterxml.jackson.dataformat.csv.CsvSchema schema = getSchema(mapper)
-				.withSkipFirstDataRow(useHeader());
-		ObjectReader reader = mapper.reader(entityClass).with(schema);
+		ObjectReader reader = getReader();
 		MappingIterator<Object> iterator;
 		try {
 			iterator = reader.readValues(stream);
@@ -47,10 +45,7 @@ public class CsvParser<E> {
 		if (isReadOnly()) {
 			throw new ReadOnlyRuntimeException("Entity of type " + entityClass.getSimpleName() + " cannot be printed in CSV (But you can read them from CSV)");
 		} else {
-			CsvMapper mapper = new CsvMapper();
-			com.fasterxml.jackson.dataformat.csv.CsvSchema schema = getSchema(mapper)
-					.withUseHeader(useHeader());
-			ObjectWriter writer = mapper.writer(schema);
+			ObjectWriter writer = getWriter();
 			try {
 				writer.writeValue(file, entities);
 			} catch (IOException e) {
@@ -59,9 +54,28 @@ public class CsvParser<E> {
 		}
 	}
 
+	protected ObjectReader getReader() {
+		CsvMapper mapper = new CsvMapper();
+		return mapper
+				.reader(entityClass)
+				.with(
+						getSchema(mapper)
+								.withSkipFirstDataRow(useHeader())
+				);
+	}
+
+	protected ObjectWriter getWriter() {
+		CsvMapper mapper = new CsvMapper();
+		return mapper
+				.writer(
+						getSchema(mapper)
+								.withUseHeader(useHeader())
+				);
+	}
+
 	protected boolean isReadOnly() {
 		CsvSchema csvSchema = entityClass.getAnnotation(CsvSchema.class);
-		if (csvSchema != null && csvSchema.columns().length > 0) {
+		if (csvSchema != null) {
 			return csvSchema.readOnly();
 		} else {
 			return CsvSchema.DEFAULT_READ_ONLY;
@@ -70,7 +84,7 @@ public class CsvParser<E> {
 
 	protected com.fasterxml.jackson.dataformat.csv.CsvSchema getSchema(CsvMapper mapper) {
 		CsvSchema csvSchema = entityClass.getAnnotation(CsvSchema.class);
-		if (csvSchema != null && csvSchema.columns().length > 0) {
+		if (csvSchema != null && !Arrays.asList(csvSchema.columns()).isEmpty()) {
 			com.fasterxml.jackson.dataformat.csv.CsvSchema.Builder builder = com.fasterxml.jackson.dataformat.csv.CsvSchema.builder();
 			String[] columns = csvSchema.columns();
 			for (String column : columns) {

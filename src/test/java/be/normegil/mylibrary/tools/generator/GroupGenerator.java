@@ -3,14 +3,16 @@ package be.normegil.mylibrary.tools.generator;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.Generator;
+import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.GeneratorRepository;
 import be.normegil.mylibrary.user.User;
 
 import java.util.UUID;
 
-public class GroupGenerator implements Generator<Group> {
+@Generator
+public class GroupGenerator implements IGenerator<Group> {
 
-	private static final Generator<User> USER_GENERATOR = GeneratorRepository.get(User.class);
+	private static final IGenerator<User> USER_GENERATOR = GeneratorRepository.get(User.class);
 	public static final String NAME = "GroupName";
 	public static final UUID DEFAULT_ID = UUID.fromString("ece90d13-eb11-47a4-b5c5-fb952738630b");
 	public static final long DEFAULT_USERS_SIZE = 2L;

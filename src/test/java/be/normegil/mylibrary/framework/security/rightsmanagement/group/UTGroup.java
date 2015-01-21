@@ -2,7 +2,7 @@ package be.normegil.mylibrary.framework.security.rightsmanagement.group;
 
 import be.normegil.mylibrary.tools.ClassWrapper;
 import be.normegil.mylibrary.tools.FieldWrapper;
-import be.normegil.mylibrary.tools.Generator;
+import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.GeneratorRepository;
 import be.normegil.mylibrary.user.User;
 import org.junit.After;
@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.when;
 public class UTGroup {
 
 	private static final int USER_INITIAL_SIZE = 2;
-	private Generator<User> userGenerator = GeneratorRepository.get(User.class);
+	private IGenerator<User> userGenerator = GeneratorRepository.get(User.class);
 	private static final String NAME = "Group";
 
 	private Group group;

@@ -3,10 +3,12 @@ package be.normegil.mylibrary.tools.generator;
 import be.normegil.mylibrary.manga.Manga;
 import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.Generator;
+import be.normegil.mylibrary.tools.IGenerator;
 
 import java.util.UUID;
 
-public class MangaGenerator implements Generator<Manga> {
+@Generator
+public class MangaGenerator implements IGenerator<Manga> {
 
 	private static final UUID DEFAULT_ID = UUID.fromString("41920e92-e4fa-457a-b705-ccecacf22c4e");
 	private static final String NAME = "MangaName";

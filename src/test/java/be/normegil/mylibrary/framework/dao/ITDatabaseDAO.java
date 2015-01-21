@@ -5,7 +5,7 @@ import be.normegil.mylibrary.SpecificTestProperties;
 import be.normegil.mylibrary.WarningTypes;
 import be.normegil.mylibrary.framework.Entity;
 import be.normegil.mylibrary.manga.Manga;
-import be.normegil.mylibrary.tools.Generator;
+import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.GeneratorRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.builder.CompareToBuilder;
@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 public class ITDatabaseDAO {
 
 	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final Generator<Manga> FACTORY = GeneratorRepository.get(Manga.class);
+	private static final IGenerator<Manga> FACTORY = GeneratorRepository.get(Manga.class);
 	private static final String ALTERNATIVE_TITLE = "AlternativeTitle";
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;

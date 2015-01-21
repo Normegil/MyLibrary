@@ -13,11 +13,11 @@ import java.util.Set;
 public class GeneratorRepository {
 
 	private static Reflections reflections = new Reflections("be.normegil");
-	private static final Map<Class, Generator> factories = new HashMap<>();
+	private static final Map<Class, IGenerator> factories = new HashMap<>();
 	private static final Logger LOG = LoggerFactory.getLogger(GeneratorRepository.class);
 	private static boolean isInitialized = false;
 
-	public static Generator get(Class aClass) {
+	public static IGenerator get(Class aClass) {
 
 		if (!isInitialized) {
 			synchronized (GeneratorRepository.class) {
@@ -28,7 +28,7 @@ public class GeneratorRepository {
 			}
 		}
 
-		Generator factory = factories.get(aClass);
+		IGenerator factory = factories.get(aClass);
 		if (factory == null) {
 			throw new UnsupportedOperationException("Factory not found for type [Type=" + aClass + "]");
 		} else {
@@ -37,11 +37,11 @@ public class GeneratorRepository {
 	}
 
 	private static void initialize() {
-		Set<Class<? extends Generator>> subTypes = reflections.getSubTypesOf(Generator.class);
+		Set<Class<?>> subTypes = reflections.getTypesAnnotatedWith(Generator.class);
 
-		for (Class<? extends Generator> subType : subTypes) {
+		for (Class<?> subType : subTypes) {
 			try {
-				Generator generator = subType.newInstance();
+				IGenerator generator = (IGenerator) subType.newInstance();
 				if (!factories.keySet().contains(generator.getSupportedClass())) {
 					factories.put(generator.getSupportedClass(), generator);
 					LOG.info("Generator found : " + generator.getClass().getSimpleName() + "[" + generator.getSupportedClass().getSimpleName() + "]");
