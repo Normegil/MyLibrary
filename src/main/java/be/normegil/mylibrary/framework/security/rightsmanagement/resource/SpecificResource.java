@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.framework.security.rightsmanagement.ressource;
+package be.normegil.mylibrary.framework.security.rightsmanagement.resource;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.user.User;

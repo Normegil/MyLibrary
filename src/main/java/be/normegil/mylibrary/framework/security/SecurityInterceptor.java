@@ -12,8 +12,8 @@ import be.normegil.mylibrary.framework.rest.RESTMethod;
 import be.normegil.mylibrary.framework.rest.error.ErrorCode;
 import be.normegil.mylibrary.framework.security.identification.Authenticator;
 import be.normegil.mylibrary.framework.security.rightsmanagement.RightsManager;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.Resource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.SpecificResource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.lang3.StringUtils;
 

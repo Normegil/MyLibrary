@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.framework.security.rightsmanagement.ressource;
+package be.normegil.mylibrary.framework.security.rightsmanagement.resource;
 
 import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 import be.normegil.mylibrary.framework.rest.RESTService;

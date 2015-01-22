@@ -3,7 +3,7 @@ package be.normegil.mylibrary.framework.security.rightsmanagement;
 import be.normegil.mylibrary.framework.Entity;
 import be.normegil.mylibrary.framework.rest.RESTMethod;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
 import be.normegil.mylibrary.user.User;
 
 import javax.persistence.*;

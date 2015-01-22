@@ -1,4 +1,4 @@
-package be.normegil.mylibrary.framework.security.rightsmanagement.ressource;
+package be.normegil.mylibrary.framework.security.rightsmanagement.resource;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.framework.Entity;
@@ -7,13 +7,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.validation.constraints.NotNull;
 
 @javax.persistence.Entity
 @Access(AccessType.FIELD)
 public class Resource extends Entity {
 	private Class<? extends RESTService> restService;
 
-	public Resource(final Class<? extends RESTService> restService) {
+	public Resource(@NotNull final Class<? extends RESTService> restService) {
 		this.restService = restService;
 	}
 

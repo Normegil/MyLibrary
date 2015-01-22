@@ -4,10 +4,10 @@ import be.normegil.mylibrary.framework.Entity;
 import be.normegil.mylibrary.framework.constraint.URIWithID;
 import be.normegil.mylibrary.framework.exception.WebApplicationException;
 import be.normegil.mylibrary.framework.rest.error.ErrorCode;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.Resource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.ResourceDatabaseDAO;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.SpecificResource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.ressource.SpecificResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.ResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResourceDatabaseDAO;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.LocalBean;
