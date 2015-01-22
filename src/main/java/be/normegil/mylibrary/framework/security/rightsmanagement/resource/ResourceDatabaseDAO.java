@@ -9,6 +9,7 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -30,25 +31,25 @@ public class ResourceDatabaseDAO extends DatabaseDAO<Resource> {
 	public ResourceDatabaseDAO() {
 	}
 
-	public ResourceDatabaseDAO(final EntityManager entityManager) {
+	public ResourceDatabaseDAO(@NotNull final EntityManager entityManager) {
 		super(entityManager);
 	}
 
-	public Optional<Resource> get(final Class<? extends RESTService> restServiceClass) {
+	public Optional<Resource> getByClass(@NotNull final Class<? extends RESTService> restServiceClass) {
 		Resource resource = getEntityManager()
 				.createQuery(getQuery(restServiceClass))
 				.getSingleResult();
 		return Optional.ofNullable(resource);
 	}
 
-	private CriteriaQuery<Resource> getQuery(final Class<? extends RESTService> restService) {
+	protected CriteriaQuery<Resource> getQuery(@NotNull final Class<? extends RESTService> restService) {
 		CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Resource> query = builder.createQuery(getEntityClass());
 		generateWhereClause(builder, query, restService);
 		return query;
 	}
 
-	private void generateWhereClause(final CriteriaBuilder builder, final CriteriaQuery<Resource> query, final Class<? extends RESTService> restService) {
+	protected void generateWhereClause(@NotNull final CriteriaBuilder builder, @NotNull final CriteriaQuery<Resource> query, @NotNull final Class<? extends RESTService> restService) {
 		Metamodel metamodel = getEntityManager().getMetamodel();
 		EntityType<Resource> userType = metamodel.entity(getEntityClass());
 		Root<Resource> resource = query.from(getEntityClass());

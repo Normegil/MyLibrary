@@ -39,7 +39,7 @@ public class RightsManager {
 	private boolean checkGroupsRights(final Collection<Group> groups, final Resource resource, final RESTMethod method) {
 		boolean canAccess = false;
 
-		Optional<Resource> mainResourceOptional = resourceDAO.get(resource.getRestService());
+		Optional<Resource> mainResourceOptional = resourceDAO.getByClass(resource.getRestService());
 		Resource mainResource = mainResourceOptional
 				.orElseThrow(() -> new IllegalStateException("Resource [" + resource.getRestService() + "] not found"));
 

@@ -5,9 +5,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		ResourceTestSuite.class,
-		SpecificResourceTestSuite.class,
-		ResourceDatabaseDAO.class
+		UTResourceDatabaseDAOSafety.class,
+		UTResourceDatabaseDAO.class,
+		ITResourceDatabaseDAO.class
 })
-public class ResourcePackageTestSuite {
+public class ResourceDatabaseDAOTestSuite {
 }

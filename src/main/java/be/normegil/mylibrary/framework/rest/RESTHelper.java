@@ -64,10 +64,10 @@ public class RESTHelper {
 			String mainResourcePath = getMainResourcePath(baseUri);
 			Optional<RESTService> defaultServiceOptional = new RESTServices().getDefaultServiceFor(mainResourcePath);
 			Class<? extends RESTService> restServiceClass = defaultServiceOptional.get().getClass();
-			Optional<Resource> resourceOptional = resourceDAO.get(restServiceClass);
+			Optional<Resource> resourceOptional = resourceDAO.getByClass(restServiceClass);
 			if (!resourceOptional.isPresent()) {
 				resourceDAO.persist(new Resource(restServiceClass));
-				resourceOptional = resourceDAO.get(restServiceClass);
+				resourceOptional = resourceDAO.getByClass(restServiceClass);
 			}
 			return resourceOptional.get();
 

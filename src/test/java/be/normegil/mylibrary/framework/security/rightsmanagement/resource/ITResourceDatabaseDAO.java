@@ -1,50 +1,48 @@
-package be.normegil.mylibrary.framework.security.rightsmanagement.group;
+package be.normegil.mylibrary.framework.security.rightsmanagement.resource;
 
 import be.normegil.mylibrary.SpecificTestProperties;
+import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.rest.RESTServices;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.Mockito;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
-public class ITGroupDatabaseDAO {
+public class ITResourceDatabaseDAO {
 
-	public static final String ORDERING_PROPERTY_NAME = "name";
+	public static final String ORDERING_PROPERTY_NAME = "restService";
 	private EntityManagerFactory entityManagerFactory;
 	private EntityManager entityManager;
-	private GroupDatabaseDAO dao;
-	private Root<Group> root;
+	private ResourceDatabaseDAO dao;
+	private Root<Resource> root;
 	private CriteriaBuilder criteriaBuilder;
-
-	@Mock
-	private Root<Group> mockRoot;
 
 	@Before
 	public void setUp() throws Exception {
 		entityManagerFactory = Persistence.createEntityManagerFactory(SpecificTestProperties.PERSISTENCE_UNIT_NAME);
 		entityManager = entityManagerFactory.createEntityManager();
-		dao = new GroupDatabaseDAO(entityManager);
+		dao = new ResourceDatabaseDAO(entityManager);
 
 		criteriaBuilder = entityManager.getCriteriaBuilder();
-		CriteriaQuery<Group> query = criteriaBuilder.createQuery(Group.class);
-		root = query.from(Group.class);
+		CriteriaQuery<Resource> query = criteriaBuilder.createQuery(Resource.class);
+		root = query.from(Resource.class);
 	}
 
 	@After
@@ -74,9 +72,38 @@ public class ITGroupDatabaseDAO {
 
 	@Test
 	public void testGetOrderParameter_OrderingProperty() throws Exception {
+		Root<Resource> mockRoot = Mockito.mock(Root.class);
 		when(mockRoot.get(ORDERING_PROPERTY_NAME))
 				.thenReturn(root.get(ORDERING_PROPERTY_NAME));
 		dao.getOrderByParameters(criteriaBuilder, mockRoot);
 		verify(mockRoot, times(1)).get(ORDERING_PROPERTY_NAME);
+	}
+
+	@Test
+	public void testGetByClass() throws Exception {
+		insertAllResourceInDatabase();
+		Resource entity = dao.getAll().iterator().next();
+
+		Optional optional = dao.getByClass(entity.getRestService());
+		Entity foundEntity = (Entity) optional.get();
+		assertEquals(entity, foundEntity);
+	}
+
+	private void insertAllResourceInDatabase() {
+		EntityManager manager = entityManagerFactory.createEntityManager();
+		RESTServices restServices = new RESTServices();
+		List<String> pathList = restServices
+				.getAllRESTServicesPaths()
+				.collect(Collectors.toList());
+		for (String path : pathList) {
+			EntityTransaction transaction = manager.getTransaction();
+			transaction.begin();
+
+			Resource resource = new Resource(restServices.getDefaultServiceFor(path).get().getClass());
+			manager.persist(resource);
+
+			transaction.commit();
+		}
+		manager.close();
 	}
 }
