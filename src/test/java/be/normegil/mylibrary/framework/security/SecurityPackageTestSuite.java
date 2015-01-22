@@ -6,7 +6,9 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		RightsManagementPackageTestSuite.class
+		RightsManagementPackageTestSuite.class,
+
+		SecurityInterceptorTestSuite.class
 })
 public class SecurityPackageTestSuite {
 }
