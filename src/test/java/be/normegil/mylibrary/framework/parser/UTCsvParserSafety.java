@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
 
 public class UTCsvParserSafety {
 
@@ -61,8 +60,8 @@ public class UTCsvParserSafety {
 
 		ObjectReader reader = Mockito.mock(ObjectReader.class);
 		doThrow(new IOException())
-				.when(writer)
-				.writeValue(file, entities);
+				.when(reader)
+				.readValues(inputStream);
 
 		CsvParser csvParser = new CsvParser<RESTError>(RESTError.class) {
 			@Override
@@ -75,16 +74,20 @@ public class UTCsvParserSafety {
 
 	@Test(expected = IORuntimeException.class)
 	public void testTo_BehaviorWhenIOException() throws Exception {
-		File file = File.createTempFile("Exception", ".csv");
-		ArrayList<RESTError> entities = new ArrayList<>();
+		File file = File.createTempFile("ExceptionTo", ".csv");
+		ArrayList<UTBaseCsvParser.ParsableObject> entities = new ArrayList<>();
+
 		ObjectWriter writer = Mockito.mock(ObjectWriter.class);
-		doThrow(new IOException()).when(writer).writeValue(file, entities);
-		CsvParser csvParser = new CsvParser<RESTError>(RESTError.class) {
+		doThrow(new IOException())
+				.when(writer)
+				.writeValue(file, entities);
+
+		CsvParser<UTBaseCsvParser.ParsableObject> csvParser = new CsvParser<UTBaseCsvParser.ParsableObject>(UTBaseCsvParser.ParsableObject.class) {
 			@Override
 			protected ObjectWriter getWriter() {
-				return super.getWriter();
+				return writer;
 			}
 		};
-		csvParser.to(entities, File.createTempFile("ExceptionTo", ".csv"));
+		csvParser.to(entities, file);
 	}
 }
