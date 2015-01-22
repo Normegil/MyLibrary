@@ -11,7 +11,7 @@ public class UTResourceSafety {
 	private static final ClassWrapper<Resource> CLASS = new ClassWrapper<>(Resource.class);
 
 	@Test(expected = ConstraintViolationException.class)
-	public void test_Null() throws Exception {
+	public void testConstructor_Null() throws Exception {
 		Validator.validate(CLASS.getConstructor(Class.class), new Object[]{null});
 	}
 }

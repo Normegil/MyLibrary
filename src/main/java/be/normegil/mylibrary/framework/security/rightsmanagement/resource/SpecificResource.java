@@ -6,6 +6,7 @@ import be.normegil.mylibrary.framework.rest.RESTService;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 @javax.persistence.Entity
@@ -19,12 +20,12 @@ public class SpecificResource extends Resource {
 	protected SpecificResource() {
 	}
 
-	public SpecificResource(final Class<? extends RESTService> restService, final String resourceID) {
+	public SpecificResource(@NotNull final Class<? extends RESTService> restService, @NotNull final String resourceID) {
 		super(restService);
 		this.resourceID = resourceID;
 	}
 
-	public SpecificResource(final Class<? extends RESTService> restService, final String resourceID, final User owner) {
+	public SpecificResource(@NotNull final Class<? extends RESTService> restService, @NotNull final String resourceID, @NotNull final User owner) {
 		super(restService);
 		this.owner = owner;
 		this.resourceID = resourceID;
