@@ -1,7 +1,11 @@
 package be.normegil.mylibrary.framework.security.identification.key;
 
+import be.normegil.mylibrary.framework.constraint.NotEmpty;
+import be.normegil.mylibrary.framework.dao.DAO;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.security.KeyPair;
 import java.util.Optional;
 
@@ -11,7 +15,7 @@ public class KeyManager {
 	@Inject
 	private KeyDatabaseDAO dao;
 
-	public KeyPair load(String keyPairName, KeyType type) {
+	public KeyPair load(@NotEmpty final String keyPairName, @NotNull final KeyType type) {
 		Optional<Key> keyOptional = dao.getByName(keyPairName);
 		Key key;
 		if (!keyOptional.isPresent()) {

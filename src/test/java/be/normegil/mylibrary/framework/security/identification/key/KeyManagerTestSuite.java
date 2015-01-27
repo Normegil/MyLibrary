@@ -5,6 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+		UTKeyManagerSafety.class,
+		UTKeyManager.class
 })
 public class KeyManagerTestSuite {
 }
