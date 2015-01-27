@@ -4,9 +4,11 @@ import be.normegil.mylibrary.framework.constraint.NotEmpty;
 import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,13 @@ import java.util.Optional;
 public class KeyDatabaseDAO extends DatabaseDAO<Key> {
 
 	private static final String KEY_NAME_FIELD_NAME = "name";
+
+	protected KeyDatabaseDAO() {
+	}
+
+	public KeyDatabaseDAO(@NotNull final EntityManager entityManager) {
+		super(entityManager);
+	}
 
 	@Override
 	protected Class<Key> getEntityClass() {

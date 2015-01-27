@@ -105,7 +105,6 @@ public class ITSpecificResourceDatabaseDAO {
 		transaction.commit();
 
 		assertNotEquals(specificResource.getId(), duplicatespecificResource.getId());
-
 		dao.get(specificResource.getRestService(), specificResource.getRessourceID());
 	}
 
