@@ -7,7 +7,7 @@ import be.normegil.mylibrary.tools.IGenerator;
 
 import java.util.UUID;
 
-@Generator
+@Generator(Manga.class)
 public class MangaGenerator implements IGenerator<Manga> {
 
 	private static final UUID DEFAULT_ID = UUID.fromString("41920e92-e4fa-457a-b705-ccecacf22c4e");
@@ -37,11 +37,6 @@ public class MangaGenerator implements IGenerator<Manga> {
 		}
 
 		return manga;
-	}
-
-	@Override
-	public Class<Manga> getSupportedClass() {
-		return Manga.class;
 	}
 
 	public synchronized long getIndex() {

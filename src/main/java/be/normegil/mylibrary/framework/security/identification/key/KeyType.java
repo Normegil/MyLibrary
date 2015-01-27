@@ -1,7 +1,6 @@
 package be.normegil.mylibrary.framework.security.identification.key;
 
 public enum KeyType {
-	AES("oct", 128),
 	RSA("RSA", 2048),
 	ECDSA("EC", 521);
 

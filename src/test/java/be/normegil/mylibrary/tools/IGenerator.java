@@ -6,5 +6,4 @@ public interface IGenerator<E> {
 
 	public E getNew(boolean withLink, boolean withIds);
 
-	public Class<E> getSupportedClass();
 }

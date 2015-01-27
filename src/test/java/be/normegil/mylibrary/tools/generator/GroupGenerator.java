@@ -3,13 +3,13 @@ package be.normegil.mylibrary.tools.generator;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.Generator;
-import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.user.User;
 
 import java.util.UUID;
 
-@Generator
+@Generator(Group.class)
 public class GroupGenerator implements IGenerator<Group> {
 
 	private static final IGenerator<User> USER_GENERATOR = GeneratorRepository.get(User.class);
@@ -34,6 +34,7 @@ public class GroupGenerator implements IGenerator<Group> {
 
 	@Override
 	public Group getNew(final boolean withLink, final boolean withIds) {
+		long index = getIndex();
 		Group group = new Group(NAME + index);
 		for (long l = 0L; l < DEFAULT_USERS_SIZE & withLink; l++) {
 			User user = USER_GENERATOR.getNew(false, withIds);
@@ -43,12 +44,11 @@ public class GroupGenerator implements IGenerator<Group> {
 		if (withIds) {
 			new EntityHelper().setId(group, UUID.randomUUID());
 		}
-		index++;
 		return group;
 	}
 
-	@Override
-	public Class<Group> getSupportedClass() {
-		return Group.class;
+	public synchronized long getIndex() {
+		index += 1;
+		return index;
 	}
 }

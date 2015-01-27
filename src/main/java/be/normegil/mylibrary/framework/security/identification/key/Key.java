@@ -34,12 +34,12 @@ public class Key extends Entity {
 	protected Key() {
 	}
 
-	public Key(final String name, final KeyType type) {
+	public Key(@NotEmpty final String name, @NotNull final KeyType type) {
 		super();
 		this.name = name;
 		this.type = type;
 
-		KeyPair keyPair = getKeyPair(type);
+		KeyPair keyPair = getKeyPair(type.getAlgorythmName(), type.getDefaultKeySize());
 
 		encodedPublicKey = encodePublicKey(keyPair.getPublic().getEncoded());
 		encodedPrivateKey = encodePrivateKey(keyPair.getPrivate().getEncoded());
@@ -55,7 +55,7 @@ public class Key extends Entity {
 
 	public PublicKey getPublicKey() {
 		try {
-			return getKetFactory()
+			return getKeyFactory(getType().getAlgorythmName())
 					.generatePublic(decodePublicKey(encodedPublicKey));
 		} catch (InvalidKeySpecException e) {
 			throw new InvalidKeySpecRuntimeException(e);
@@ -64,42 +64,46 @@ public class Key extends Entity {
 
 	public PrivateKey getPrivateKey() {
 		try {
-			return getKetFactory()
+			return getKeyFactory(getType().getAlgorythmName())
 					.generatePrivate(decodePrivateKey(encodedPrivateKey));
 		} catch (InvalidKeySpecException e) {
 			throw new InvalidKeySpecRuntimeException(e);
 		}
 	}
 
-	private KeyPair getKeyPair(final KeyType type) {
+	protected KeyPair getKeyPair(final String algorythmName, final int keySize) {
+		KeyPairGenerator generator = getKeyPairGenerator(algorythmName);
+		generator.initialize(keySize, new SecureRandom());
+		return generator.generateKeyPair();
+	}
+
+	protected byte[] encodePublicKey(@NotNull final byte[] publicKey) {
+		return new X509EncodedKeySpec(publicKey).getEncoded();
+	}
+
+	protected EncodedKeySpec decodePublicKey(@NotNull final byte[] encodedPublicKey) {
+		return new X509EncodedKeySpec(encodedPublicKey);
+	}
+
+	protected byte[] encodePrivateKey(@NotNull final byte[] privateKey) {
+		return new PKCS8EncodedKeySpec(privateKey).getEncoded();
+	}
+
+	protected EncodedKeySpec decodePrivateKey(@NotNull final byte[] encodedPrivateKey) {
+		return new PKCS8EncodedKeySpec(encodedPrivateKey);
+	}
+
+	protected KeyPairGenerator getKeyPairGenerator(final String algorythmName) {
 		try {
-			KeyPairGenerator generator = KeyPairGenerator.getInstance(type.getAlgorythmName());
-			generator.initialize(type.getDefaultKeySize(), new SecureRandom());
-			return generator.generateKeyPair();
+			return KeyPairGenerator.getInstance(algorythmName);
 		} catch (NoSuchAlgorithmException e) {
 			throw new NoSuchAlgorithmRuntimeException(e);
 		}
 	}
 
-	public byte[] encodePublicKey(final byte[] publicKey) {
-		return new X509EncodedKeySpec(publicKey).getEncoded();
-	}
-
-	public EncodedKeySpec decodePublicKey(final byte[] encodedPublicKey) {
-		return new X509EncodedKeySpec(encodedPublicKey);
-	}
-
-	public byte[] encodePrivateKey(final byte[] privateKey) {
-		return new PKCS8EncodedKeySpec(privateKey).getEncoded();
-	}
-
-	public EncodedKeySpec decodePrivateKey(final byte[] encodedPrivateKey) {
-		return new PKCS8EncodedKeySpec(encodedPrivateKey);
-	}
-
-	private KeyFactory getKetFactory() {
+	protected KeyFactory getKeyFactory(final String algorythmName) {
 		try {
-			return KeyFactory.getInstance(getType().getAlgorythmName());
+			return KeyFactory.getInstance(algorythmName);
 		} catch (NoSuchAlgorithmException e) {
 			throw new NoSuchAlgorithmRuntimeException(e);
 		}

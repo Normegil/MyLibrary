@@ -6,10 +6,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.ws.rs.container.ContainerRequestContext;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class UTSecurityInterceptor {
-
-	@Mock
-	private ContainerRequestContext requestContext;
+//
+//	@Mock
+//	private ContainerRequestContext requestContext;
 
 }

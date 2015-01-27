@@ -9,7 +9,7 @@ import be.normegil.mylibrary.user.User;
 
 import java.util.UUID;
 
-@Generator
+@Generator(User.class)
 public class UserGenerator implements IGenerator<User> {
 
 	private static final IGenerator<Group> GROUP_GENERATOR = GeneratorRepository.get(Group.class);
@@ -52,8 +52,4 @@ public class UserGenerator implements IGenerator<User> {
 		return user;
 	}
 
-	@Override
-	public Class<User> getSupportedClass() {
-		return User.class;
-	}
 }

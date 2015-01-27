@@ -42,9 +42,10 @@ public class GeneratorRepository {
 		for (Class<?> subType : subTypes) {
 			try {
 				IGenerator generator = (IGenerator) subType.newInstance();
-				if (!factories.keySet().contains(generator.getSupportedClass())) {
-					factories.put(generator.getSupportedClass(), generator);
-					LOG.info("Generator found : " + generator.getClass().getSimpleName() + "[" + generator.getSupportedClass().getSimpleName() + "]");
+				Generator generatorAnnotation = subType.getAnnotation(Generator.class);
+				if (!factories.keySet().contains(generatorAnnotation.value())) {
+					factories.put(generatorAnnotation.value(), generator);
+					LOG.info("Generator found : " + generator.getClass().getSimpleName() + "[" + generatorAnnotation.value().getSimpleName() + "]");
 				}
 			} catch (InstantiationException e) {
 				throw new InstantiationRuntimeException(e);
