@@ -3,8 +3,8 @@ package be.normegil.mylibrary.tools.generator;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.Generator;
-import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.user.User;
 
 import java.util.UUID;
@@ -12,11 +12,12 @@ import java.util.UUID;
 @Generator(User.class)
 public class UserGenerator implements IGenerator<User> {
 
+	public static final String PASSWORD = "HashedPassword";
 	private static final IGenerator<Group> GROUP_GENERATOR = GeneratorRepository.get(Group.class);
-	public static final String PSEUDO = "Pseudo";
-	public static final String HASHED_PASSWORD = "HashedPassword";
-	public static final UUID DEFAULT_ID = UUID.fromString("d81596e0-fc7f-4631-80f0-62f3fef5f6fc");
-	public static final long DEFAULT_GROUPS_SIZE = 2L;
+	private static final String PSEUDO = "Pseudo";
+	private static final String HASHED_PASSWORD = "$2a$10$6.Fdthl/tdVqyT7laEvwz.zdRIcOjBD1mdCRbPWLP1yeOCAJN1jwm";
+	private static final UUID DEFAULT_ID = UUID.fromString("d81596e0-fc7f-4631-80f0-62f3fef5f6fc");
+	private static final long DEFAULT_GROUPS_SIZE = 2L;
 	private static long index = 0L;
 
 	@Override

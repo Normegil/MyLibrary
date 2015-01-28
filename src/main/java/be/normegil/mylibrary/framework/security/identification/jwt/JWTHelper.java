@@ -36,7 +36,14 @@ public class JWTHelper {
 	@Inject
 	private KeyManager keyManager;
 
-	public SignedJWT generateSignedJWT(@NotNull final User user) throws JOSEException {
+	protected JWTHelper() {
+	}
+
+	public JWTHelper(@NotNull final KeyManager keyManager) {
+		this.keyManager = keyManager;
+	}
+
+	public SignedJWT generateSignedJWT(@NotNull final User user) {
 		KeyPair keyPair = keyManager.load(JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
 		ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
 
@@ -49,9 +56,17 @@ public class JWTHelper {
 				generateClaims(user)
 		);
 
-		ECDSASigner signer = new ECDSASigner(privateKey.getS());
-		jwt.sign(signer);
+		signJWT(privateKey, jwt);
 		return jwt;
+	}
+
+	protected void signJWT(final ECPrivateKey privateKey, final SignedJWT jwt) {
+		try {
+			ECDSASigner signer = new ECDSASigner(privateKey.getS());
+			jwt.sign(signer);
+		} catch (JOSEException e) {
+			throw new JOSERuntimeException(e);
+		}
 	}
 
 	public boolean isValid(@NotNull final SignedJWT token) {

@@ -2,6 +2,7 @@ package be.normegil.mylibrary.framework.security.identification.jwt;
 
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.framework.DateHelper;
+import be.normegil.mylibrary.framework.exception.JOSERuntimeException;
 import be.normegil.mylibrary.framework.security.identification.key.KeyManager;
 import be.normegil.mylibrary.framework.security.identification.key.KeyType;
 import be.normegil.mylibrary.tools.ClassWrapper;
@@ -11,11 +12,8 @@ import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.dao.KeyMemoryDAO;
 import be.normegil.mylibrary.user.User;
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.crypto.ECDSASigner;
-import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import org.junit.After;
@@ -68,10 +66,23 @@ public class UTJWTHelper {
 	}
 
 	@Test
+	public void testGenerateSignedJWT_ValidityDate() throws Exception {
+		User user = GENERATOR.getDefault(true, true);
+		SignedJWT signedJWT = jwtHelper.generateSignedJWT(user);
+		ReadOnlyJWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+		LocalDateTime issueTime = new DateHelper().from(claimsSet.getIssueTime());
+		ChronoUnit chronoUnit = ChronoUnit.MINUTES;
+		LocalDateTime truncatedIssueTime = issueTime.truncatedTo(chronoUnit);
+		LocalDateTime expirationTime = new DateHelper().from(claimsSet.getExpirationTime());
+		LocalDateTime truncatedExpirationTime = expirationTime.truncatedTo(chronoUnit);
+		assertEquals(truncatedIssueTime.plus(ApplicationProperties.Security.JSonWebToken.TOKEN_VALIDITY_PERIOD), truncatedExpirationTime);
+	}
+
+	@Test
 	public void testGenerateSignedJWT_PropertiesAndHeader() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT jwt = getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
+		SignedJWT jwt = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
 		assertJWTEquals(jwt, jwtHelper.generateSignedJWT(user));
 	}
 
@@ -79,7 +90,7 @@ public class UTJWTHelper {
 	public void testIsValid_ValidJWT() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
 		assertTrue(jwtHelper.isValid(signedJWT));
 	}
 
@@ -87,7 +98,7 @@ public class UTJWTHelper {
 	public void testIsValid_WrongSigningKeys() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load("FakeKeys", KeyType.ECDSA);
-		SignedJWT signedJWT = getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
 		assertFalse(jwtHelper.isValid(signedJWT));
 	}
 
@@ -95,7 +106,7 @@ public class UTJWTHelper {
 	public void testIsValid_OutdatedJWT() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = getSignedJWT(user, keyPair, DEFAULT_TIME, LocalDateTime.now().minus(5, ChronoUnit.YEARS));
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, LocalDateTime.now().minus(5, ChronoUnit.YEARS));
 		assertFalse(jwtHelper.isValid(signedJWT));
 	}
 
@@ -103,37 +114,29 @@ public class UTJWTHelper {
 	public void testIsValid_JWTInFuture() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = getSignedJWT(user, keyPair, LocalDateTime.now().plus(5, ChronoUnit.YEARS), DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, LocalDateTime.now().plus(5, ChronoUnit.YEARS), DEFAULT_VALIDITY_DATE);
 		assertFalse(jwtHelper.isValid(signedJWT));
+	}
+
+	@Test(expected = JOSERuntimeException.class)
+	public void testSignException() throws Exception {
+		User user = GENERATOR.getNew(true, true);
+		SignedJWT temporarySignedJWT = jwtHelper.generateSignedJWT(user);
+		SignedJWT signedJWT = new SignedJWT(temporarySignedJWT.getHeader(), temporarySignedJWT.getJWTClaimsSet()) {
+			@Override
+			public synchronized void sign(final JWSSigner signer) throws JOSEException {
+				throw new JOSEException("");
+			}
+		};
+
+		KeyPair keyPair = keyManager.load("TestKey", KeyType.ECDSA);
+		ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
+		jwtHelper.signJWT(privateKey, signedJWT);
 	}
 
 	@Test
 	public void testDefaultCurrentTime() throws Exception {
 		assertEquals(LocalDateTime.now(), new JWTHelper().getCurrentTime());
-	}
-
-	private SignedJWT getSignedJWT(final User user, final KeyPair keyPair, final LocalDateTime issueTime, final LocalDateTime validityDate) throws JOSEException {
-		ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
-
-		JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES512)
-				.type(new JOSEObjectType(JWTHelper.JWT_HEADER_TYP_VALUE))
-				.build();
-		SignedJWT jwt = new SignedJWT(
-				header,
-				generateClaims(user, issueTime, validityDate)
-
-		);
-		ECDSASigner signer = new ECDSASigner(privateKey.getS());
-		jwt.sign(signer);
-		return jwt;
-	}
-
-	private JWTClaimsSet generateClaims(final User user, final LocalDateTime issueTime, final LocalDateTime validityDate) {
-		JWTClaimsSet claimsSet = new JWTClaimsSet();
-		claimsSet.setIssuer(user.getPseudo());
-		claimsSet.setIssueTime(new DateHelper().toDate(issueTime));
-		claimsSet.setExpirationTime(new DateHelper().toDate(validityDate));
-		return claimsSet;
 	}
 
 	private void assertJWTEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {

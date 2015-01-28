@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 		JWTPackageTestSuite.class,
 		KeyPackageTestSuite.class,
 
-		AuthenticationFeatureTestSuite.class
+		AuthenticationFeatureTestSuite.class,
+		AuthenticatorTestSuite.class
 })
 public class IdentificationPackageTestSuite {
 }
