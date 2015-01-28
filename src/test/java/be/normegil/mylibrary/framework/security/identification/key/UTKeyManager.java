@@ -63,4 +63,13 @@ public class UTKeyManager {
 		Optional<Key> keyOptional = dao.getByName(testKey);
 		assertEquals(keyType, keyOptional.get().getType());
 	}
+
+	@Test
+	public void testGenerateNewKey_KeyCreatedInOtherThread() throws Exception {
+		String keyName = "TestKeyX";
+		Key expected = new Key(keyName, KeyType.ECDSA);
+		dao.persist(expected);
+		Key toTest = keyManager.generateNewKey(keyName, KeyType.ECDSA);
+		assertEquals(expected, toTest);
+	}
 }

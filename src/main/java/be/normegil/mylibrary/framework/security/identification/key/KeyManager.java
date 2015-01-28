@@ -33,7 +33,7 @@ public class KeyManager {
 		return new KeyPair(key.getPublicKey(), key.getPrivateKey());
 	}
 
-	private synchronized Key generateNewKey(final String keyPairName, final KeyType type) {
+	protected synchronized Key generateNewKey(final String keyPairName, final KeyType type) {
 		Optional<Key> keyOptional = dao.getByName(keyPairName);
 		Key key;
 		if (!keyOptional.isPresent()) {
