@@ -4,6 +4,7 @@ import be.normegil.mylibrary.framework.constraint.NotEmpty;
 import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
@@ -14,7 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
-public class KeyDatabaseDAO extends DatabaseDAO<Key> {
+@Default
+public class KeyDatabaseDAO extends DatabaseDAO<Key> implements KeyDAO {
 
 	private static final String KEY_NAME_FIELD_NAME = "name";
 

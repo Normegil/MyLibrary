@@ -17,7 +17,7 @@ public class GeneratorRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(GeneratorRepository.class);
 	private static boolean isInitialized = false;
 
-	public static IGenerator get(Class aClass) {
+	public static <T> IGenerator<T> get(Class<T> aClass) {
 
 		if (!isInitialized) {
 			synchronized (GeneratorRepository.class) {
