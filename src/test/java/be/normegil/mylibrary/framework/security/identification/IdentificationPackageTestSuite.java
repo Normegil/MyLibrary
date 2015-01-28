@@ -8,7 +8,9 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		JWTPackageTestSuite.class,
-		KeyPackageTestSuite.class
+		KeyPackageTestSuite.class,
+
+		AuthenticationFeatureTestSuite.class
 })
 public class IdentificationPackageTestSuite {
 }

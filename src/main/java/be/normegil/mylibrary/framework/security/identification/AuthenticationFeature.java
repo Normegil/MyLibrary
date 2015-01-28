@@ -18,6 +18,14 @@ public class AuthenticationFeature implements DynamicFeature {
 
 	@Override
 	public void configure(final ResourceInfo resourceInfo, final FeatureContext context) {
+		if (resourceInfo == null) {
+			throw new NullPointerException();
+		}
+
+		if (context == null) {
+			throw new NullPointerException();
+		}
+
 		Method method = resourceInfo.getResourceMethod();
 		if (!method.isAnnotationPresent(AuthenticationNotRequired.class)) {
 			context.register(securityInterceptor);
