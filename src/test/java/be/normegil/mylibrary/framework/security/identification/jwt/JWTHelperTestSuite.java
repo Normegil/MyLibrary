@@ -5,6 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+		UTJWTHelperSafety.class,
+		UTJWTHelper.class
 })
 public class JWTHelperTestSuite {
 }

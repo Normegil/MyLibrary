@@ -1,27 +1,28 @@
 package be.normegil.mylibrary.framework.security.identification.jwt;
 
 import be.normegil.mylibrary.ApplicationProperties;
-import be.normegil.mylibrary.user.User;
-import be.normegil.mylibrary.user.UserDatabaseDAO;
 import be.normegil.mylibrary.framework.DateHelper;
 import be.normegil.mylibrary.framework.exception.JOSERuntimeException;
 import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
 import be.normegil.mylibrary.framework.security.identification.key.KeyManager;
 import be.normegil.mylibrary.framework.security.identification.key.KeyType;
-import com.nimbusds.jose.*;
+import be.normegil.mylibrary.user.User;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JOSEObjectType;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.crypto.ECDSASigner;
 import com.nimbusds.jose.crypto.ECDSAVerifier;
-import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.ECPoint;
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -29,36 +30,13 @@ import java.time.LocalDateTime;
 @Stateless
 public class JWTHelper {
 
-	public static final String JWT_SIGNING_KEY_NAME = "JWTSigning";
-	public static final String JWE_CRYPTOGRAPHIC_KEY_NAME = "JWECryptographic";
-	private static final String JWT_HEADER_TYP_VALUE = "JWT";
+	//	public static final String JWE_CRYPTOGRAPHIC_KEY_NAME = "JWECryptographic";
+	protected static final String JWT_SIGNING_KEY_NAME = "JWTSigning";
+	protected static final String JWT_HEADER_TYP_VALUE = "JWT";
 	@Inject
 	private KeyManager keyManager;
 
-	@Inject
-	private UserDatabaseDAO dao;
-
-	/**
-	 * Doesn't work - Need specific manipulation of Wildfly due to BouncyCastle
-	 * Not Needed until we have a confidential information in the JWT
-	 */
-//	public JWEObject generateEncryptedJWT(User user) {
-//		try {
-//			SignedJWT signedJWT = generateSignedJWT(user);
-//			JWEObject jweObject = new JWEObject(
-//					new JWEHeader(JWEAlgorithm.RSA_OAEP, EncryptionMethod.A128GCM),
-//					new Payload(signedJWT)
-//			);
-//			KeyPair cryptographicKeys = keyManager.load(JWE_CRYPTOGRAPHIC_KEY_NAME, KeyType.RSA);
-//			RSAPublicKey publicKey = (RSAPublicKey) cryptographicKeys.getPublic();
-//			RSAEncrypter encrypter = new RSAEncrypter(publicKey);
-//			jweObject.encrypt(encrypter);
-//			return jweObject;
-//		} catch (JOSEException e) {
-//			throw new JOSERuntimeException(e);
-//		}
-//	}
-	public SignedJWT generateSignedJWT(final User user) throws JOSEException {
+	public SignedJWT generateSignedJWT(@NotNull final User user) throws JOSEException {
 		KeyPair keyPair = keyManager.load(JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
 		ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
 
@@ -76,7 +54,7 @@ public class JWTHelper {
 		return jwt;
 	}
 
-	public boolean isValid(final SignedJWT token) {
+	public boolean isValid(@NotNull final SignedJWT token) {
 		try {
 			KeyPair keyPair = keyManager.load(JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
 			if (!validateSignature(token, keyPair)) {
@@ -96,7 +74,7 @@ public class JWTHelper {
 		}
 	}
 
-	private boolean validateSignature(final SignedJWT token, final KeyPair keyPair) throws JOSEException {
+	protected boolean validateSignature(final SignedJWT token, final KeyPair keyPair) throws JOSEException {
 		ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
 
 		ECPoint ecPoint = publicKey.getW();
@@ -107,9 +85,9 @@ public class JWTHelper {
 		return token.verify(verifier);
 	}
 
-	private boolean validateTimeInfo(final SignedJWT token) throws ParseException {
+	protected boolean validateTimeInfo(final SignedJWT token) throws ParseException {
 		LocalDateTime issueTime = new DateHelper().from(token.getJWTClaimsSet().getIssueTime());
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = getCurrentTime();
 		if (now.isBefore(issueTime)) {
 			return false;
 		}
@@ -120,17 +98,11 @@ public class JWTHelper {
 		return true;
 	}
 
-	private SignedJWT getSignedJWT(final JWEObject encryptedToken) throws JOSEException {
-		KeyPair cryptographicKeys = keyManager.load(JWE_CRYPTOGRAPHIC_KEY_NAME, KeyType.RSA);
-		encryptedToken.decrypt(new RSADecrypter((RSAPrivateKey) cryptographicKeys.getPrivate()));
-		return encryptedToken.getPayload().toSignedJWT();
-	}
-
 	private JWTClaimsSet generateClaims(final User user) {
 		JWTClaimsSet claimsSet = new JWTClaimsSet();
 		claimsSet.setIssuer(user.getPseudo());
 
-		LocalDateTime issueTime = LocalDateTime.now();
+		LocalDateTime issueTime = getCurrentTime();
 		claimsSet.setIssueTime(new DateHelper().toDate(issueTime));
 
 		LocalDateTime expirationTime = issueTime.plus(ApplicationProperties.Security.JSonWebToken.TOKEN_VALIDITY_PERIOD);
@@ -138,4 +110,36 @@ public class JWTHelper {
 
 		return claimsSet;
 	}
+
+	protected LocalDateTime getCurrentTime() {
+		return LocalDateTime.now();
+	}
+
+	/**
+	 * Doesn't work - Need specific manipulation of Wildfly due to BouncyCastle
+	 * Not Needed until we have a confidential information in the JWT
+	 */
+
+//	public JWEObject generateEncryptedJWT(User user) {
+//		try {
+//			SignedJWT signedJWT = generateSignedJWT(user);
+//			JWEObject jweObject = new JWEObject(
+//					new JWEHeader(JWEAlgorithm.RSA_OAEP, EncryptionMethod.A128GCM),
+//					new Payload(signedJWT)
+//			);
+//			KeyPair cryptographicKeys = keyManager.load(JWE_CRYPTOGRAPHIC_KEY_NAME, KeyType.RSA);
+//			RSAPublicKey publicKey = (RSAPublicKey) cryptographicKeys.getPublic();
+//			RSAEncrypter encrypter = new RSAEncrypter(publicKey);
+//			jweObject.encrypt(encrypter);
+//			return jweObject;
+//		} catch (JOSEException e) {
+//			throw new JOSERuntimeException(e);
+//		}
+//	}
+//
+//	private SignedJWT getSignedJWT(final JWEObject encryptedToken) throws JOSEException {
+//		KeyPair cryptographicKeys = keyManager.load(JWE_CRYPTOGRAPHIC_KEY_NAME, KeyType.RSA);
+//		encryptedToken.decrypt(new RSADecrypter((RSAPrivateKey) cryptographicKeys.getPrivate()));
+//		return encryptedToken.getPayload().toSignedJWT();
+//	}
 }
