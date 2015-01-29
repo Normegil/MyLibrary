@@ -42,7 +42,7 @@ public class RightDatabaseDAO extends DatabaseDAO<Right> {
 		);
 	}
 
-	public Optional<Right> get(final Group group, final Resource resource, final RESTMethod method) {
+	public Optional<Right> get(@NotNull final Group group, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		CriteriaQuery<Right> query = getQuery(group, resource, method);
 		try {
 			Right right = getEntityManager()
@@ -54,7 +54,7 @@ public class RightDatabaseDAO extends DatabaseDAO<Right> {
 		}
 	}
 
-	public Optional<Right> get(final User user, final SpecificResource resource, final RESTMethod method) {
+	public Optional<Right> get(@NotNull final User user, @NotNull final SpecificResource resource, @NotNull final RESTMethod method) {
 		CriteriaQuery<Right> query = getQuery(user, resource, method);
 		Right right;
 		try {
@@ -67,7 +67,7 @@ public class RightDatabaseDAO extends DatabaseDAO<Right> {
 		}
 	}
 
-	private CriteriaQuery<Right> getQuery(final Object owner, final Resource resource, final RESTMethod method) {
+	protected CriteriaQuery<Right> getQuery(final Object owner, final Resource resource, final RESTMethod method) {
 		CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
 		CriteriaQuery<Right> query = builder.createQuery(getEntityClass());
 

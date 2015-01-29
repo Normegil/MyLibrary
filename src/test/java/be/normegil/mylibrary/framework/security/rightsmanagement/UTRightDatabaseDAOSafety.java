@@ -3,6 +3,7 @@ package be.normegil.mylibrary.framework.security.rightsmanagement;
 import be.normegil.mylibrary.framework.rest.RESTMethod;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
 import be.normegil.mylibrary.manga.MangaREST;
 import be.normegil.mylibrary.tools.ClassWrapper;
 import be.normegil.mylibrary.tools.GeneratorRepository;
@@ -14,6 +15,7 @@ import org.junit.Test;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolationException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 public class UTRightDatabaseDAOSafety {
 
@@ -23,7 +25,7 @@ public class UTRightDatabaseDAOSafety {
 	private static final RESTMethod DEFAULT_REST_METHOD = RESTMethod.GET;
 	private static final Resource DEFAULT_RESOURCE = new Resource(MangaREST.class);
 	private RightDatabaseDAO entity = new RightDatabaseDAO();
-	private Method GET_BY_USER_METHOD = CLASS.getMethod("get", User.class, Resource.class, RESTMethod.class);
+	private Method GET_BY_USER_METHOD = CLASS.getMethod("get", User.class, SpecificResource.class, RESTMethod.class);
 	private Method GET_BY_GROUP_METHOD = CLASS.getMethod("get", Group.class, Resource.class, RESTMethod.class);
 
 	@Test(expected = ConstraintViolationException.class)
@@ -33,7 +35,7 @@ public class UTRightDatabaseDAOSafety {
 
 	@Test(expected = ConstraintViolationException.class)
 	public void testGetByUser_NullUser() throws Exception {
-		Validator.validate(entity, GET_BY_USER_METHOD, null, DEFAULT_RESOURCE, DEFAULT_REST_METHOD);
+		Validator.validate(entity, GET_BY_USER_METHOD, null, new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), DEFAULT_REST_METHOD);
 	}
 
 	@Test(expected = ConstraintViolationException.class)
@@ -43,7 +45,7 @@ public class UTRightDatabaseDAOSafety {
 
 	@Test(expected = ConstraintViolationException.class)
 	public void testGetByUser_NullMethod() throws Exception {
-		Validator.validate(entity, GET_BY_USER_METHOD, USER_GENERATOR.getDefault(false, false), DEFAULT_RESOURCE, null);
+		Validator.validate(entity, GET_BY_USER_METHOD, USER_GENERATOR.getDefault(false, false), new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), null);
 	}
 
 	@Test(expected = ConstraintViolationException.class)

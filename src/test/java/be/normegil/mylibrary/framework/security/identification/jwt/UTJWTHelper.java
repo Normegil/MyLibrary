@@ -136,7 +136,8 @@ public class UTJWTHelper {
 
 	@Test
 	public void testDefaultCurrentTime() throws Exception {
-		assertEquals(LocalDateTime.now(), new JWTHelper().getCurrentTime());
+		ChronoUnit chronoUnit = ChronoUnit.MINUTES;
+		assertEquals(LocalDateTime.now().truncatedTo(chronoUnit), new JWTHelper().getCurrentTime().truncatedTo(chronoUnit));
 	}
 
 	private void assertJWTEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {

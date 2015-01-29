@@ -23,7 +23,9 @@ public class Right extends Entity {
 	@JoinColumn(name = "id_group")
 	private Group group;
 	@NotNull
-	@ManyToOne
+	@ManyToOne(cascade = {
+			CascadeType.PERSIST
+	})
 	@JoinColumn(name = "id_resource")
 	private Resource resource;
 	@NotNull

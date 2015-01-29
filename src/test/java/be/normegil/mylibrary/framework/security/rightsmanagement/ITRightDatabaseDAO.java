@@ -7,13 +7,16 @@ import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
 import be.normegil.mylibrary.manga.MangaREST;
+import be.normegil.mylibrary.tools.EntityHelper;
 import be.normegil.mylibrary.tools.GeneratorRepository;
 import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.user.User;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -30,12 +33,11 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ITRightDatabaseDAO {
 
 	private static final IGenerator<User> USER_GENERATOR = GeneratorRepository.get(User.class);
 	private static final IGenerator<Group> GROUP_GENERATOR = GeneratorRepository.get(Group.class);
-	private static final String ORDERING_PROPERTY_NAME = "name";
-	private static final long KEYS_NUMBER_TO_CREATE = 5L;
 	private static final long NUMBER_OF_RIGHTS_TO_CREATE = 5L;
 	private static final RESTMethod DEFAULT_METHOD = RESTMethod.GET;
 	private EntityManagerFactory entityManagerFactory;
@@ -117,14 +119,27 @@ public class ITRightDatabaseDAO {
 
 	@Test
 	public void testGetByGroup_InexistingRight() throws Exception {
-		Optional<Right> rightOptional = dao.get(GROUP_GENERATOR.getNew(false, false), new Resource(MangaREST.class), RESTMethod.DELETE);
+		insertGroupRightsInDatabase(NUMBER_OF_RIGHTS_TO_CREATE);
+		Right right = dao.getAll().iterator().next();
+		Resource resource = new Resource(MangaREST.class);
+		new EntityHelper().setId(resource, UUID.randomUUID());
+		Optional<Right> rightOptional = dao.get(right.getGroup().get(), resource, RESTMethod.DELETE);
 		assertFalse(rightOptional.isPresent());
 	}
 
 	@Test
 	public void testGetByUser_InexistingRight() throws Exception {
-		Optional<Right> rightOptional = dao.get(USER_GENERATOR.getNew(false, false), new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), RESTMethod.DELETE);
+		insertUserRightsInDatabase(NUMBER_OF_RIGHTS_TO_CREATE);
+		Right right = dao.getAll().iterator().next();
+		SpecificResource resource = new SpecificResource(MangaREST.class, UUID.randomUUID().toString());
+		new EntityHelper().setId(resource, UUID.randomUUID());
+		Optional<Right> rightOptional = dao.get(right.getUser().get(), resource, RESTMethod.DELETE);
 		assertFalse(rightOptional.isPresent());
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testUnmanagedOwnerType() throws Exception {
+		dao.getQuery(" ", new Resource(MangaREST.class), DEFAULT_METHOD);
 	}
 
 	private void insertUserRightsInDatabase(final long l) {
@@ -133,7 +148,9 @@ public class ITRightDatabaseDAO {
 			EntityTransaction transaction = manager.getTransaction();
 			transaction.begin();
 
-			Right userRight = new Right(USER_GENERATOR.getNew(false, false), new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), DEFAULT_METHOD);
+			User user = USER_GENERATOR.getNew(false, false);
+			manager.persist(user);
+			Right userRight = new Right(user, new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), DEFAULT_METHOD);
 			manager.persist(userRight);
 
 			transaction.commit();
@@ -147,7 +164,9 @@ public class ITRightDatabaseDAO {
 			EntityTransaction transaction = manager.getTransaction();
 			transaction.begin();
 
-			Right groupRight = new Right(GROUP_GENERATOR.getNew(false, false), new Resource(MangaREST.class), DEFAULT_METHOD);
+			Group group = GROUP_GENERATOR.getNew(false, false);
+			manager.persist(group);
+			Right groupRight = new Right(group, new Resource(MangaREST.class), DEFAULT_METHOD);
 			manager.persist(groupRight);
 
 			transaction.commit();
