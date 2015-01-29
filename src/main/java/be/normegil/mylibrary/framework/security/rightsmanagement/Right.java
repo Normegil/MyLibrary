@@ -4,6 +4,7 @@ import be.normegil.mylibrary.framework.Entity;
 import be.normegil.mylibrary.framework.rest.RESTMethod;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
 import be.normegil.mylibrary.user.User;
 
 import javax.persistence.*;
@@ -29,7 +30,7 @@ public class Right extends Entity {
 	@Enumerated(EnumType.STRING)
 	private RESTMethod method;
 
-	public Right(final User user, final Resource resource, final RESTMethod method) {
+	public Right(final User user, final SpecificResource resource, final RESTMethod method) {
 		this.user = user;
 		this.resource = resource;
 		this.method = method;

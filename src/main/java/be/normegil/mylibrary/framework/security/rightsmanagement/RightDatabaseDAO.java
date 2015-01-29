@@ -14,6 +14,7 @@ import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class RightDatabaseDAO extends DatabaseDAO<Right> {
 	public RightDatabaseDAO() {
 	}
 
-	public RightDatabaseDAO(final EntityManager entityManager) {
+	public RightDatabaseDAO(@NotNull final EntityManager entityManager) {
 		super(entityManager);
 	}
 

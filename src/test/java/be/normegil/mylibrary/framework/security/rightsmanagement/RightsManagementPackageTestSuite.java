@@ -8,7 +8,10 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		GroupPackageTestSuite.class,
-		ResourcePackageTestSuite.class
+		ResourcePackageTestSuite.class,
+
+		RightTestSuite.class,
+		RightDatabaseDAOTestSuite.class
 })
 public class RightsManagementPackageTestSuite {
 }
