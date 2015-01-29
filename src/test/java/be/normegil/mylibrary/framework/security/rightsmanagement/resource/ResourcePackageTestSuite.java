@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 		ResourceTestSuite.class,
 		SpecificResourceTestSuite.class,
-		ResourceDatabaseDAO.class,
+		ResourceDatabaseDAOTestSuite.class,
 		SpecificResourceDatabaseDAOTestSuite.class
 })
 public class ResourcePackageTestSuite {

@@ -30,13 +30,13 @@ public class Right extends Entity {
 	@Enumerated(EnumType.STRING)
 	private RESTMethod method;
 
-	public Right(final User user, final SpecificResource resource, final RESTMethod method) {
+	public Right(@NotNull final User user, @NotNull final SpecificResource resource, @NotNull final RESTMethod method) {
 		this.user = user;
 		this.resource = resource;
 		this.method = method;
 	}
 
-	public Right(final Group group, final Resource resource, final RESTMethod method) {
+	public Right(@NotNull final Group group, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		this.group = group;
 		this.resource = resource;
 		this.method = method;
