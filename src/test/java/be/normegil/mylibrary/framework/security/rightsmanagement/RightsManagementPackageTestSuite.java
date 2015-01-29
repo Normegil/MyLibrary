@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
 		ResourcePackageTestSuite.class,
 
 		RightTestSuite.class,
-		RightDatabaseDAOTestSuite.class
+		RightDatabaseDAOTestSuite.class,
+		RightsManagerTestSuite.class
 })
 public class RightsManagementPackageTestSuite {
 }

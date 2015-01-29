@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
-public class ResourceDatabaseDAO extends DatabaseDAO<Resource> {
+public class ResourceDatabaseDAO extends DatabaseDAO<Resource> implements ResourceDAO {
 	@Override
 	protected Class<Resource> getEntityClass() {
 		return Resource.class;

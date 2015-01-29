@@ -1,15 +1,16 @@
 package be.normegil.mylibrary.framework.security.rightsmanagement;
 
-import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.framework.rest.RESTMethod;
 import be.normegil.mylibrary.framework.security.rightsmanagement.group.Group;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.resource.ResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.ResourceDAO;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
+import be.normegil.mylibrary.user.User;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -18,25 +19,34 @@ import java.util.Optional;
 public class RightsManager {
 
 	@Inject
-	private RightDatabaseDAO rightDAO;
+	private RightDAO rightDAO;
 
 	@Inject
-	private ResourceDatabaseDAO resourceDAO;
+	private ResourceDAO resourceDAO;
 
-	public boolean canAccess(final User user, final Resource resource, final RESTMethod method) {
+	protected RightsManager() {
+	}
+
+	public RightsManager(@NotNull final RightDAO rightDAO, @NotNull final ResourceDAO resourceDAO) {
+		this.rightDAO = rightDAO;
+		this.resourceDAO = resourceDAO;
+	}
+
+	public boolean canAccess(@NotNull final User user, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		boolean canAccess = false;
+		if (checkGroupsRights(user.getGroups(), resource, method)) {
+			canAccess = true;
+		}
 		if (resource instanceof SpecificResource && ((SpecificResource) resource).getOwner().isPresent()) {
 			User owner = ((SpecificResource) resource).getOwner().get();
 			if (user.equals(owner)) {
 				canAccess = true;
 			}
-		} else {
-			canAccess = checkGroupsRights(user.getGroups(), resource, method);
 		}
 		return canAccess;
 	}
 
-	private boolean checkGroupsRights(final Collection<Group> groups, final Resource resource, final RESTMethod method) {
+	private boolean checkGroupsRights(@NotNull final Collection<Group> groups, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		boolean canAccess = false;
 
 		Optional<Resource> mainResourceOptional = resourceDAO.getByClass(resource.getRestService());
@@ -52,16 +62,16 @@ public class RightsManager {
 		return canAccess;
 	}
 
-	public boolean canAccess(final Group group, final Resource resource, final RESTMethod method) {
+	public boolean canAccess(@NotNull final Group group, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		Optional<Right> rightOptional = rightDAO.get(group, resource, method);
 		return rightOptional.isPresent();
 	}
 
-	public void grantAccess(final Group group, final Resource resource, final RESTMethod method) {
+	public void grantAccess(@NotNull final Group group, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		rightDAO.persist(new Right(group, resource, method));
 	}
 
-	public void denyAccess(final Group group, final Resource resource, final RESTMethod method) {
+	public void denyAccess(@NotNull final Group group, @NotNull final Resource resource, @NotNull final RESTMethod method) {
 		Optional<Right> rightOptional = rightDAO.get(group, resource, method);
 		if (rightOptional.isPresent()) {
 			rightDAO.remove(rightOptional.get());

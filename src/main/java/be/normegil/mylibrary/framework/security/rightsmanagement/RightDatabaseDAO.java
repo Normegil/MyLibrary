@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
-public class RightDatabaseDAO extends DatabaseDAO<Right> {
+public class RightDatabaseDAO extends DatabaseDAO<Right> implements RightDAO{
 
 	public RightDatabaseDAO() {
 	}
