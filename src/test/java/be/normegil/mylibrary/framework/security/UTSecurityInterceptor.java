@@ -11,6 +11,7 @@ import be.normegil.mylibrary.framework.security.identification.key.KeyManager;
 import be.normegil.mylibrary.framework.security.rightsmanagement.RightsManager;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
 import be.normegil.mylibrary.manga.MangaREST;
+import be.normegil.mylibrary.tools.Assert;
 import be.normegil.mylibrary.tools.GeneratorRepository;
 import be.normegil.mylibrary.tools.IGenerator;
 import be.normegil.mylibrary.tools.dao.KeyMemoryDAO;
@@ -64,7 +65,7 @@ public class UTSecurityInterceptor {
 
 	@Test
 	public void testIdentificiation_UserReturned() throws Exception {
-		User user = USER_GENERATOR.getNew(true, false);
+		User user = USER_GENERATOR.getDefault(true, false);
 		UserMemoryDAO dao = new UserMemoryDAO();
 		dao.persist(user);
 
@@ -85,8 +86,8 @@ public class UTSecurityInterceptor {
 		SignedJWT signedJWT = jwtHelper.generateSignedJWT(user);
 
 		SecurityInterceptor securityInterceptor = new SecurityInterceptor(authenticator, rightsManager, restHelper);
-		Couple<User, SignedJWT> userSignedJWTCouple = securityInterceptor.identify(getAuthorizationHeader(user.getPseudo(), UserGenerator.PASSWORD), null);
-		assertNotEquals(signedJWT, userSignedJWTCouple.getSecond());
+		Couple<User, SignedJWT> userSignedJWTCouple = securityInterceptor.identify(null, signedJWT.serialize());
+		new Assert().assertJWTNotEquals(signedJWT, userSignedJWTCouple.getSecond());
 	}
 
 	@Test

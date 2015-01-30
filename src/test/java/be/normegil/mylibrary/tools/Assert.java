@@ -10,44 +10,46 @@ import org.slf4j.LoggerFactory;
 import java.text.ParseException;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-
 public class Assert {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Assert.class);
 
-	private void assertJWTNotEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {
-		assertHeaderNotEquals(expected.getHeader(), toTest.getHeader());
-		assertClaimNotEquals(expected.getJWTClaimsSet(), toTest.getJWTClaimsSet());
+	public void assertJWTNotEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {
+		if (headerEquals(expected.getHeader(), toTest.getHeader())
+				&& claimEquals(expected.getJWTClaimsSet(), toTest.getJWTClaimsSet())) {
+			throw new AssertionError();
+		}
 	}
 
-	private void assertJWTEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {
-		assertHeaderEquals(expected.getHeader(), toTest.getHeader());
-		assertClaimEquals(expected.getJWTClaimsSet(), toTest.getJWTClaimsSet());
+	public void assertJWTEquals(final SignedJWT expected, final SignedJWT toTest) throws ParseException {
+		if (!headerEquals(expected.getHeader(), toTest.getHeader())
+				|| !claimEquals(expected.getJWTClaimsSet(), toTest.getJWTClaimsSet())) {
+			throw new AssertionError();
+		}
 	}
 
-	private boolean assertHeaderEquals(final JWSHeader expected, final JWSHeader toTest) {
-		return new EqualsBuilder()
-				.isEquals();
-		assertEquals(expected.getAlgorithm(), toTest.getAlgorithm());
-		assertEquals(expected.getType(), toTest.getType());
+	private boolean headerEquals(final JWSHeader expected, final JWSHeader toTest) {
+		EqualsBuilder builder = new EqualsBuilder()
+				.append(expected.getAlgorithm(), toTest.getAlgorithm())
+				.append(expected.getType(), toTest.getType())
+				.append(expected.getCustomParams().size(), toTest.getCustomParams().size());
 		Map<String, Object> expectedParams = expected.getCustomParams();
 		Map<String, Object> toTestParams = toTest.getCustomParams();
-		assertEquals(expectedParams.size(), toTestParams.size());
 		for (Map.Entry<String, Object> expectedParam : expectedParams.entrySet()) {
-			assertEquals(expectedParam.getValue(), toTestParams.get(expectedParam.getKey()));
+			builder.append(expectedParam.getValue(), toTestParams.get(expectedParam.getKey()));
 		}
+		return builder.isEquals();
 	}
 
-	private void assertClaimEquals(final ReadOnlyJWTClaimsSet expectedClaimsSet, final ReadOnlyJWTClaimsSet toTestClaimsSet) {
-		return new EqualsBuilder()
-				.isEquals();
+	private boolean claimEquals(final ReadOnlyJWTClaimsSet expectedClaimsSet, final ReadOnlyJWTClaimsSet toTestClaimsSet) {
+		EqualsBuilder equalsBuilder = new EqualsBuilder()
+				.append(expectedClaimsSet.getAllClaims().size(), toTestClaimsSet.getAllClaims().size());
 		Map<String, Object> expectedClaims = expectedClaimsSet.getAllClaims();
 		Map<String, Object> toTestClaims = toTestClaimsSet.getAllClaims();
-		assertEquals(expectedClaims.size(), toTestClaims.size());
 		for (Map.Entry<String, Object> expectedClaim : expectedClaims.entrySet()) {
-			assertEquals(expectedClaim.getValue(), toTestClaims.get(expectedClaim.getKey()));
+			equalsBuilder.append(expectedClaim.getValue(), toTestClaims.get(expectedClaim.getKey()));
 		}
+		return equalsBuilder.isEquals();
 	}
 
 }

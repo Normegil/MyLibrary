@@ -26,6 +26,7 @@ import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECPoint;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Stateless
 public class JWTHelper {
@@ -122,6 +123,8 @@ public class JWTHelper {
 
 		LocalDateTime expirationTime = issueTime.plus(ApplicationProperties.Security.JSonWebToken.TOKEN_VALIDITY_PERIOD);
 		claimsSet.setExpirationTime(new DateHelper().toDate(expirationTime));
+
+		claimsSet.setJWTID(UUID.randomUUID().toString());
 
 		return claimsSet;
 	}
