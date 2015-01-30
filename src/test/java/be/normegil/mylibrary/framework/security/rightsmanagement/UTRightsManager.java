@@ -124,4 +124,10 @@ public class UTRightsManager {
 		resourceDAO.persist(new Resource(specificResource.getRestService()));
 		assertFalse(rightsManager.canAccess(user, specificResource, RESTMethod.PUT));
 	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testCanAccessByUser_MainResourceNotExisting() throws Exception {
+		User user = USER_GENERATOR.getNew(true, false);
+		rightsManager.canAccess(user, new SpecificResource(MangaREST.class, UUID.randomUUID().toString()), RESTMethod.GET);
+	}
 }
