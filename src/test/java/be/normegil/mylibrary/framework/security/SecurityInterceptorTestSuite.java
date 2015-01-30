@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-//		UTSecurityInterceptorSafety.class,
-//		UTSecurityInterceptor.class
+		UTSecurityInterceptorSafety.class,
+		UTSecurityInterceptor.class
 })
 public class SecurityInterceptorTestSuite {
 }

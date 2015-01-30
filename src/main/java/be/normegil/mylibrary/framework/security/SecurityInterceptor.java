@@ -1,8 +1,6 @@
 package be.normegil.mylibrary.framework.security;
 
 import be.normegil.mylibrary.Constants;
-import be.normegil.mylibrary.user.User;
-import be.normegil.mylibrary.user.UserDatabaseDAO;
 import be.normegil.mylibrary.framework.Couple;
 import be.normegil.mylibrary.framework.URIHelper;
 import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
@@ -14,6 +12,8 @@ import be.normegil.mylibrary.framework.security.identification.Authenticator;
 import be.normegil.mylibrary.framework.security.rightsmanagement.RightsManager;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
+import be.normegil.mylibrary.user.User;
+import be.normegil.mylibrary.user.UserDatabaseDAO;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.lang3.StringUtils;
 
@@ -51,8 +51,21 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 	@Inject
 	private RESTHelper restHelper;
 
+	protected SecurityInterceptor() {
+	}
+
+	protected SecurityInterceptor(final Authenticator authenticator, final RightsManager rightsManager, final RESTHelper restHelper) {
+		this.authenticator = authenticator;
+		this.rightsManager = rightsManager;
+		this.restHelper = restHelper;
+	}
+
 	@Override
 	public void filter(final ContainerRequestContext request) throws IOException {
+		if (request == null) {
+			throw new NullPointerException();
+		}
+
 		String authorizationHeader = request.getHeaderString(Constants.HTTP.Header.AUTHORIZATION);
 		String tokenHeader = request.getHeaderString(Constants.HTTP.Header.TOKEN);
 		Couple<User, SignedJWT> userInfo = identify(authorizationHeader, tokenHeader);
@@ -62,7 +75,7 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 		request.setProperty(Constants.HTTP.Header.TOKEN, userInfo.getSecond().serialize());
 	}
 
-	private void checkRights(final User user, final UriInfo uriInfo, final String methodName) {
+	protected void checkRights(final User user, final UriInfo uriInfo, final String methodName) {
 		Resource resource = restHelper.getResourceFor(uriInfo);
 		RESTMethod method;
 		if ("GET".equals(methodName) && isMainResource(resource)) {
@@ -80,7 +93,7 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 		return !(resource instanceof SpecificResource);
 	}
 
-	private Couple<User, SignedJWT> identify(final String authorizationHeader, final String tokenHeader) {
+	protected Couple<User, SignedJWT> identify(final String authorizationHeader, final String tokenHeader) {
 		Couple<User, SignedJWT> userInfo;
 		if (!StringUtils.isBlank(authorizationHeader)) {
 			userInfo = authenticateUserPassword(authorizationHeader);
@@ -113,6 +126,10 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 
 	@Override
 	public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
+		if (requestContext == null || responseContext == null) {
+			throw new NullPointerException();
+		}
+
 		Object token = requestContext.getProperty(Constants.HTTP.Header.TOKEN);
 		if (token != null) {
 			List<Object> tokenHeader = Arrays.asList(token);
