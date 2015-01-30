@@ -45,7 +45,7 @@ public class GeneratorRepository {
 				Generator generatorAnnotation = subType.getAnnotation(Generator.class);
 				if (!factories.keySet().contains(generatorAnnotation.value())) {
 					factories.put(generatorAnnotation.value(), generator);
-					LOG.info("Generator found : " + generator.getClass().getSimpleName() + "[" + generatorAnnotation.value().getSimpleName() + "]");
+					LOG.info("Generator found : [" + generatorAnnotation.value().getSimpleName() + "] " + generator.getClass().getSimpleName() + "");
 				}
 			} catch (InstantiationException e) {
 				throw new InstantiationRuntimeException(e);

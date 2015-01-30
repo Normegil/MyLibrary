@@ -42,7 +42,7 @@ public class CollectionResource {
 		limit = helper.getRealLimit(init.limit);
 		totalNumberOfItems = init.totalNumberOfItems;
 
-		first = helper.getCollectionURL(init.baseURI, FIRST_OFFSET, limit);
+		first = helper.getCollectionURI(init.baseURI, FIRST_OFFSET, limit);
 		last = helper.generateLastURL(init.baseURI, limit, totalNumberOfItems);
 		previous = helper.generatePreviousURL(init.baseURI, offset, limit);
 		next = helper.generateNextURL(init.baseURI, offset, limit, totalNumberOfItems);
@@ -50,7 +50,7 @@ public class CollectionResource {
 		items = init.items;
 	}
 
-	public CollectionResource(final CollectionResource resource) {
+	public CollectionResource(@Valid @NotNull final CollectionResource resource) {
 		offset = resource.getOffset();
 		limit = resource.getLimit();
 		first = resource.getUriToFirstPage();
@@ -149,8 +149,7 @@ public class CollectionResource {
 	}
 
 	private boolean offsetIsConsistant(final Long offset, final Long totalNumberOfItems) {
-		return (offset == 0 && offset.equals(totalNumberOfItems))
-				|| offset < totalNumberOfItems;
+		return offset == 0 || offset < totalNumberOfItems;
 	}
 
 	public abstract static class Init<E extends Init<E>> {
@@ -171,7 +170,7 @@ public class CollectionResource {
 			offset = resource.getOffset();
 			limit = resource.getLimit();
 			totalNumberOfItems = resource.getTotalNumberOfItems();
-			baseURI = helper().getBaseURL(resource.getUriToFirstPage());
+			baseURI = helper().getBaseURI(resource.getUriToFirstPage());
 			return self();
 		}
 
@@ -215,41 +214,41 @@ public class CollectionResource {
 	}
 
 	public static class Helper {
-		private URI generatePreviousURL(@NotNull URI baseURL, long offset, int limit) {
+		private URI generatePreviousURL(@NotNull URI baseURI, long offset, int limit) {
 			if (offset != FIRST_OFFSET) {
 				long previousOffset;
-				if (offset - limit < FIRST_OFFSET) {
+				if (offset - limit <= FIRST_OFFSET) {
 					previousOffset = FIRST_OFFSET;
 				} else {
 					previousOffset = offset - limit;
 				}
-				return getCollectionURL(baseURL, previousOffset, limit);
+				return getCollectionURI(baseURI, previousOffset, limit);
 			}
 			return null;
 		}
 
-		private URI generateNextURL(URI baseURL, long offset, int limit, long totalNumberOfItems) {
+		protected URI generateNextURL(URI baseURI, long offset, int limit, long totalNumberOfItems) {
 			if (offset + limit < totalNumberOfItems) {
-				return getCollectionURL(baseURL, offset + limit, limit);
+				return getCollectionURI(baseURI, offset + limit, limit);
 			}
 			return null;
 		}
 
-		private URI generateLastURL(URI baseURL, int limit, long totalNumberOfItems) {
+		private URI generateLastURL(URI baseURI, int limit, long totalNumberOfItems) {
 			long numberOfPagesMinusOne = totalNumberOfItems / limit;
 			if (totalNumberOfItems % limit == 0) {
 				numberOfPagesMinusOne -= 1;
 			}
 			long lastOffset = numberOfPagesMinusOne * limit;
-			return getCollectionURL(baseURL, lastOffset, limit);
+			return getCollectionURI(baseURI, lastOffset, limit);
 		}
 
-		public URI getCollectionURL(@NotNull final URI baseURI, final long offset, final int limit) {
+		public URI getCollectionURI(@NotNull final URI baseURI, final long offset, final int limit) {
 			return URI.create(baseURI.toString() + "?offset=" + offset + "&limit=" + limit);
 		}
 
-		public URI getBaseURL(@NotNull final URI collectionURI) {
-			String baseURIString = StringUtils.substringBefore(collectionURI.toString(), "/");
+		public URI getBaseURI(@NotNull final URI collectionURI) {
+			String baseURIString = StringUtils.substringBefore(collectionURI.toString(), "?");
 			return URI.create(baseURIString);
 		}
 
