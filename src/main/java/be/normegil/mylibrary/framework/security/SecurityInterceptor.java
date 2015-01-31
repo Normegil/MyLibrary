@@ -63,7 +63,7 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 	@Override
 	public void filter(final ContainerRequestContext request) throws IOException {
 		if (request == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		}
 
 		String authorizationHeader = request.getHeaderString(Constants.HTTP.Header.AUTHORIZATION);
@@ -127,7 +127,7 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 	@Override
 	public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
 		if (requestContext == null || responseContext == null) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException();
 		}
 
 		Object token = requestContext.getProperty(Constants.HTTP.Header.TOKEN);

@@ -21,19 +21,18 @@ public class UTSecurityInterceptorSafety {
 	@Mock
 	private ContainerResponseContext responseContext;
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testFilter_Null() throws Exception {
 		entity.filter(null);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testFilterResponse_NullRequest() throws Exception {
 		entity.filter(null, responseContext);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testFilterResponse_NullResponse() throws Exception {
 		entity.filter(requestContext, null);
 	}
-
 }

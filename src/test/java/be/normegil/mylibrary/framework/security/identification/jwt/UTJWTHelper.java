@@ -82,15 +82,17 @@ public class UTJWTHelper {
 	public void testGenerateSignedJWT_PropertiesAndHeader() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT jwt = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
-		assertJWTEquals(jwt, jwtHelper.generateSignedJWT(user));
+		SignedJWT toTest = jwtHelper.generateSignedJWT(user);
+		String jwtid = toTest.getJWTClaimsSet().getJWTID();
+		SignedJWT jwt = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE, jwtid);
+		assertJWTEquals(jwt, toTest);
 	}
 
 	@Test
 	public void testIsValid_ValidJWT() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE, "");
 		assertTrue(jwtHelper.isValid(signedJWT));
 	}
 
@@ -98,7 +100,7 @@ public class UTJWTHelper {
 	public void testIsValid_WrongSigningKeys() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load("FakeKeys", KeyType.ECDSA);
-		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, DEFAULT_VALIDITY_DATE,"");
 		assertFalse(jwtHelper.isValid(signedJWT));
 	}
 
@@ -106,7 +108,7 @@ public class UTJWTHelper {
 	public void testIsValid_OutdatedJWT() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, LocalDateTime.now().minus(5, ChronoUnit.YEARS));
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, DEFAULT_TIME, LocalDateTime.now().minus(5, ChronoUnit.YEARS), "");
 		assertFalse(jwtHelper.isValid(signedJWT));
 	}
 
@@ -114,7 +116,7 @@ public class UTJWTHelper {
 	public void testIsValid_JWTInFuture() throws Exception {
 		User user = GENERATOR.getDefault(true, true);
 		KeyPair keyPair = keyManager.load(JWTHelper.JWT_SIGNING_KEY_NAME, KeyType.ECDSA);
-		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, LocalDateTime.now().plus(5, ChronoUnit.YEARS), DEFAULT_VALIDITY_DATE);
+		SignedJWT signedJWT = new JWTHelperTestSuite().getSignedJWT(user, keyPair, LocalDateTime.now().plus(5, ChronoUnit.YEARS), DEFAULT_VALIDITY_DATE, "");
 		assertFalse(jwtHelper.isValid(signedJWT));
 	}
 

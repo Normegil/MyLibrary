@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 })
 public class JWTHelperTestSuite {
 
-	public SignedJWT getSignedJWT(final User user, final KeyPair keyPair, final LocalDateTime issueTime, final LocalDateTime validityDate) throws JOSEException {
+	public SignedJWT getSignedJWT(final User user, final KeyPair keyPair, final LocalDateTime issueTime, final LocalDateTime validityDate, final String jwtID) throws JOSEException {
 		ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
 
 		JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.ES512)
@@ -31,7 +31,7 @@ public class JWTHelperTestSuite {
 				.build();
 		SignedJWT jwt = new SignedJWT(
 				header,
-				generateClaims(user, issueTime, validityDate)
+				generateClaims(user, issueTime, validityDate, jwtID)
 
 		);
 		ECDSASigner signer = new ECDSASigner(privateKey.getS());
@@ -39,11 +39,12 @@ public class JWTHelperTestSuite {
 		return jwt;
 	}
 
-	private JWTClaimsSet generateClaims(final User user, final LocalDateTime issueTime, final LocalDateTime validityDate) {
+	private JWTClaimsSet generateClaims(final User user, final LocalDateTime issueTime, final LocalDateTime validityDate, final String jwtID) {
 		JWTClaimsSet claimsSet = new JWTClaimsSet();
 		claimsSet.setIssuer(user.getPseudo());
 		claimsSet.setIssueTime(new DateHelper().toDate(issueTime));
 		claimsSet.setExpirationTime(new DateHelper().toDate(validityDate));
+		claimsSet.setJWTID(jwtID);
 		return claimsSet;
 	}
 

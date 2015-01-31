@@ -133,7 +133,7 @@ public class UTAuthenticator {
 
 		KeyManager manager = new KeyManager(new KeyMemoryDAO());
 		LocalDateTime issueTime = LocalDateTime.now();
-		SignedJWT jwt = new JWTHelperTestSuite().getSignedJWT(user, manager.load("Test", KeyType.ECDSA), issueTime, issueTime.plus(ApplicationProperties.Security.JSonWebToken.TOKEN_VALIDITY_PERIOD));
+		SignedJWT jwt = new JWTHelperTestSuite().getSignedJWT(user, manager.load("Test", KeyType.ECDSA), issueTime, issueTime.plus(ApplicationProperties.Security.JSonWebToken.TOKEN_VALIDITY_PERIOD), "");
 
 		try {
 			authenticator.authenticateToken(jwt);

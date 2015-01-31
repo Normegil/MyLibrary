@@ -2,6 +2,7 @@ package be.normegil.mylibrary.framework.security;
 
 import be.normegil.mylibrary.Constants;
 import be.normegil.mylibrary.framework.Couple;
+import be.normegil.mylibrary.framework.exception.ParseRuntimeException;
 import be.normegil.mylibrary.framework.exception.WebApplicationException;
 import be.normegil.mylibrary.framework.rest.RESTHelper;
 import be.normegil.mylibrary.framework.rest.RESTMethod;
@@ -26,7 +27,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.UriInfo;
+import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
@@ -244,5 +248,31 @@ public class UTSecurityInterceptor {
 		byte[] encoded = Base64.getEncoder().encode(bytes);
 		String encodedUserPass = new String(encoded);
 		return Constants.Security.AUTHORIZATION_SCHEME + " " + encodedUserPass;
+	}
+
+	@Test(expected = ParseRuntimeException.class)
+	public void testParseExceptionHandling() throws Exception {
+		User user = USER_GENERATOR.getNew(false, false);
+		SignedJWT signedJWT = new JWTHelper(new KeyManager(new KeyMemoryDAO())).generateSignedJWT(user);
+		when(authenticator.authenticateToken(any()))
+				.thenThrow(ParseException.class);
+		SecurityInterceptor securityInterceptor = new SecurityInterceptor(authenticator, rightsManager, restHelper);
+		securityInterceptor.identify(null, signedJWT.serialize());
+	}
+
+	@Test
+	public void testFilterResponse() throws Exception {
+		User user = USER_GENERATOR.getNew(false, false);
+		JWTHelper jwtHelper = new JWTHelper(new KeyManager(new KeyMemoryDAO()));
+		SignedJWT signedJWT = jwtHelper.generateSignedJWT(user);
+		String serializedJWT = signedJWT.serialize();
+		when(requestContext.getProperty(Constants.HTTP.Header.TOKEN))
+				.thenReturn(serializedJWT);
+		MultivaluedHashMap<String, Object> hashMap = new MultivaluedHashMap<>();
+		when(responseContext.getHeaders())
+				.thenReturn(hashMap);
+		SecurityInterceptor securityInterceptor = new SecurityInterceptor(authenticator, rightsManager, restHelper);
+		securityInterceptor.filter(requestContext, responseContext);
+		assertEquals(Arrays.asList(serializedJWT), hashMap.get(Constants.HTTP.Header.TOKEN));
 	}
 }
