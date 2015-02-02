@@ -66,7 +66,7 @@ public abstract class Entity {
 		}
 
 		protected void fromBase(@NotNull final URI baseUri, @NotNull @ExistingID final Entity entity) {
-			href = new RESTHelper().toUri(baseUri, entity);
+			href = RESTHelper.toUri(baseUri, entity);
 		}
 	}
 }

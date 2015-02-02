@@ -5,6 +5,7 @@ import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 import be.normegil.mylibrary.framework.rest.RESTService;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
@@ -16,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
-public class SpecificResourceDatabaseDAO extends DatabaseDAO<SpecificResource> {
+@Default
+public class SpecificResourceDatabaseDAO extends DatabaseDAO<SpecificResource> implements SpecificResourceDAO {
 
 	public SpecificResourceDatabaseDAO(@NotNull final EntityManager entityManager) {
 		super(entityManager);

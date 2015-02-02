@@ -3,6 +3,8 @@ package be.normegil.mylibrary.framework.security.rightsmanagement.resource;
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.user.User;
 import be.normegil.mylibrary.framework.rest.RESTService;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
@@ -39,7 +41,6 @@ public class SpecificResource extends Resource {
 		return resourceID;
 	}
 
-
 	@Override
 	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this, ApplicationProperties.TO_STRING_STYLE)
@@ -50,5 +51,32 @@ public class SpecificResource extends Resource {
 					.append("owner", owner);
 		}
 		return builder.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		SpecificResource rhs = (SpecificResource) obj;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.append(this.resourceID, rhs.resourceID)
+				.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(owner)
+				.append(resourceID)
+				.toHashCode();
 	}
 }

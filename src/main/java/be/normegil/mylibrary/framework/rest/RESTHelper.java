@@ -1,14 +1,15 @@
 package be.normegil.mylibrary.framework.rest;
 
 import be.normegil.mylibrary.framework.Entity;
-import be.normegil.mylibrary.framework.constraint.URIWithID;
+import be.normegil.mylibrary.framework.constraint.URIWithIDValidator;
 import be.normegil.mylibrary.framework.exception.WebApplicationException;
 import be.normegil.mylibrary.framework.rest.error.ErrorCode;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.resource.ResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.ResourceDAO;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
-import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResourceDatabaseDAO;
+import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResourceDAO;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -23,14 +24,25 @@ import java.util.*;
 public class RESTHelper {
 
 	@Inject
-	private ResourceDatabaseDAO resourceDAO;
+	protected ResourceDAO resourceDAO;
 
 	@Inject
-	private SpecificResourceDatabaseDAO specificResourceDAO;
+	protected SpecificResourceDAO specificResourceDAO;
+
+	public RESTHelper() {
+	}
+
+	public RESTHelper(@NotNull final ResourceDAO resourceDAO, @NotNull final SpecificResourceDAO specificResourceDAO) {
+		this.resourceDAO = resourceDAO;
+		this.specificResourceDAO = specificResourceDAO;
+	}
 
 	public static final String PATH_SEPARATOR = "/";
 
-	public List<URI> toUri(final URI baseUri, final Collection<? extends Entity> entities) {
+	public static List<URI> toUri(final URI baseUri, final Collection<? extends Entity> entities) {
+		Validate.notNull(baseUri);
+		Validate.notNull(entities);
+
 		List<URI> uris = new ArrayList<>();
 		for (Entity entity : entities) {
 			uris.add(toUri(baseUri, entity));
@@ -38,9 +50,11 @@ public class RESTHelper {
 		return uris;
 	}
 
-	public URI toUri(final URI baseUri, final Entity entity) {
-		String baseUriAsString = baseUri.toString();
+	public static URI toUri(final URI baseUri, final Entity entity) {
+		Validate.notNull(baseUri);
+		Validate.notNull(entity);
 
+		String baseUriAsString = baseUri.toString();
 		if (!baseUriAsString.endsWith(PATH_SEPARATOR)) {
 			baseUriAsString += PATH_SEPARATOR;
 		}
@@ -49,16 +63,19 @@ public class RESTHelper {
 		if (idOptional.isPresent()) {
 			return URI.create(baseUriAsString + new RESTServices().getPathForResourceType(entity.getClass()) + PATH_SEPARATOR + idOptional.get());
 		} else {
-			return null;
+			throw new IllegalArgumentException("Entity without IDs cannot be transform into URI");
 		}
 	}
 
-	public UUID toUUID(@NotNull @URIWithID final URI uri) {
+	public static UUID toUUID(final URI uri) {
+		Validate.notNull(uri);
+		Validate.isTrue(new URIWithIDValidator().isValid(uri, null));
+
 		String uuidString = StringUtils.substringAfterLast(uri.toString(), PATH_SEPARATOR);
 		return UUID.fromString(uuidString);
 	}
 
-	public Resource getResourceFor(final UriInfo uriInfo) {
+	public Resource getResourceFor(@NotNull final UriInfo uriInfo) {
 		URI baseUri = uriInfo.getRequestUri();
 		if (isMainResource(baseUri)) {
 			String mainResourcePath = getMainResourcePath(baseUri);

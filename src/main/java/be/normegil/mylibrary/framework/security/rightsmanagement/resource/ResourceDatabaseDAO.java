@@ -4,6 +4,7 @@ import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 import be.normegil.mylibrary.framework.rest.RESTService;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import javax.persistence.metamodel.EntityType;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
+@Default
 public class ResourceDatabaseDAO extends DatabaseDAO<Resource> implements ResourceDAO {
 	@Override
 	protected Class<Resource> getEntityClass() {
