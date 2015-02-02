@@ -5,8 +5,10 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+		DefaultExceptionMapperTestSuite.class,
 		ErrorCodeTestSuite.class,
-		ErrorRepositoryTestSuite.class
+		ErrorRepositoryTestSuite.class,
+		RESTErrorTestSuite.class
 })
 public class ErrorPackageTestSuite {
 }

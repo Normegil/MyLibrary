@@ -1,24 +1,21 @@
-package be.normegil.librarium.model.rest.exception;
+package be.normegil.mylibrary.framework.rest.error;
 
-import be.normegil.librarium.WarningTypes;
-import be.normegil.librarium.libraries.URL;
-import be.normegil.librarium.model.rest.HttpStatus;
-import be.normegil.librarium.tool.DataFactory;
-import be.normegil.librarium.tool.FactoryRepository;
+import be.normegil.mylibrary.framework.rest.HttpStatus;
+import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 
 import static org.junit.Assert.assertEquals;
 
 public class UTRESTErrorBuilder {
 
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<RESTError> REST_ERROR_FACTORY = FactoryRepository.get(RESTError.class);
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<URL> URL_FACTORY = FactoryRepository.get(URL.class);
+	private static final IGenerator<RESTError> GENERATOR = GeneratorRepository.get(RESTError.class);
+	private static final IGenerator<URI> URI_GENERATOR = GeneratorRepository.get(URI.class);
 	private static final int ERROR_CODE = 34567;
 	private static final String MESSAGE = "Message";
 	private static final String DEVELOPER_MESSAGE = "DeveloperMessage";
@@ -37,7 +34,7 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testFrom_Code() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
@@ -46,7 +43,7 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testFrom_Status() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
@@ -55,7 +52,7 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testFrom_Message() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
@@ -64,7 +61,7 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testFrom_DeveloperMessage() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
@@ -73,16 +70,16 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testFrom_URL() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
-		assertEquals(error.getMoreInfoURL(), copy.getMoreInfoURL());
+		assertEquals(error.getMoreInfoUri(), copy.getMoreInfoUri());
 	}
 
 	@Test
 	public void testFrom_Time() throws Exception {
-		RESTError error = REST_ERROR_FACTORY.getNew();
+		RESTError error = GENERATOR.getNew(false, false);
 		RESTError copy = entity
 				.from(error)
 				.build();
@@ -99,10 +96,10 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testSetHttpStatus() throws Exception {
-		RESTError rESTError = entity
+		RESTError restError = entity
 				.setHttpStatus(HttpStatus.ACCEPTED)
 				.build();
-		assertEquals(HttpStatus.ACCEPTED, rESTError.getHttpStatus());
+		assertEquals(HttpStatus.ACCEPTED.value(), restError.getHttpStatus());
 	}
 
 	@Test
@@ -123,11 +120,11 @@ public class UTRESTErrorBuilder {
 
 	@Test
 	public void testSetMoreInfoURL() throws Exception {
-		URL url = URL_FACTORY.getNew();
+		URI uri = URI_GENERATOR.getNew(false, false);
 		RESTError rESTError = entity
-				.setMoreInfoURL(url)
+				.setMoreInfoURL(uri)
 				.build();
-		assertEquals(url, rESTError.getMoreInfoURL());
+		assertEquals(uri, rESTError.getMoreInfoUri());
 	}
 
 	@Test

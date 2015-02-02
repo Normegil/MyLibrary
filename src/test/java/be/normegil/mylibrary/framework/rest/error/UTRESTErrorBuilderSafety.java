@@ -1,14 +1,14 @@
-package be.normegil.librarium.model.rest.exception;
+package be.normegil.mylibrary.framework.rest.error;
 
-import be.normegil.librarium.libraries.ClassWrapper;
-import be.normegil.librarium.libraries.URL;
-import be.normegil.librarium.model.rest.HttpStatus;
-import be.normegil.librarium.tool.validation.Validator;
+import be.normegil.mylibrary.framework.rest.HttpStatus;
+import be.normegil.mylibrary.tools.ClassWrapper;
+import be.normegil.mylibrary.tools.Validator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolationException;
+import java.net.URI;
 import java.time.LocalDateTime;
 
 public class UTRESTErrorBuilderSafety {
@@ -64,7 +64,7 @@ public class UTRESTErrorBuilderSafety {
 
 	@Test(expected = ConstraintViolationException.class)
 	public void testSetMoreInfoUrl_Null() throws Exception {
-		Validator.validate(entity, CLASS.getMethod("setMoreInfoURL", URL.class), new Object[]{null});
+		Validator.validate(entity, CLASS.getMethod("setMoreInfoURL", URI.class), new Object[]{null});
 	}
 
 	@Test(expected = ConstraintViolationException.class)

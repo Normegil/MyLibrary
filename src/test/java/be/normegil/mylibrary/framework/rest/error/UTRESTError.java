@@ -1,8 +1,8 @@
-package be.normegil.librarium.model.rest.exception;
+package be.normegil.mylibrary.framework.rest.error;
 
-import be.normegil.librarium.WarningTypes;
-import be.normegil.librarium.tool.DataFactory;
-import be.normegil.librarium.tool.FactoryRepository;
+import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,16 +11,16 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class UTRESTError {
 
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<RESTError> FACTORY = FactoryRepository.get(RESTError.class);
+	private static final IGenerator<RESTError> GENERATOR = GeneratorRepository.get(RESTError.class);
 	private RESTError entity;
 
 	@Before
 	public void setUp() throws Exception {
-		entity = FACTORY.getDefault();
+		entity = GENERATOR.getDefault(false, false);
 	}
 
 	@After
@@ -47,5 +47,11 @@ public class UTRESTError {
 		LocalDateTime newTime = entity.getTime().plus(2, ChronoUnit.MINUTES);
 		entity.withTime(newTime);
 		assertEquals(time, entity.getTime());
+	}
+
+	@Test
+	public void testToString() throws Exception {
+		RESTError error = GENERATOR.getNew(false, false);
+		assertFalse(StringUtils.isBlank(error.toString()));
 	}
 }

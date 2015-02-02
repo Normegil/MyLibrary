@@ -30,7 +30,7 @@ public class GeneratorRepository {
 
 		IGenerator factory = factories.get(aClass);
 		if (factory == null) {
-			throw new UnsupportedOperationException("Factory not found for type [Type=" + aClass + "]");
+			throw new UnsupportedOperationException("Generator not found for type [Type=" + aClass + "]");
 		} else {
 			return factory;
 		}

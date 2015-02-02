@@ -1,13 +1,12 @@
-package be.normegil.librarium.model.rest.exception;
+package be.normegil.mylibrary.framework.rest.error;
 
-import be.normegil.librarium.WarningTypes;
-import be.normegil.librarium.libraries.URL;
-import be.normegil.librarium.model.rest.HttpStatus;
-import be.normegil.librarium.tool.DataFactory;
-import be.normegil.librarium.tool.FactoryRepository;
-import be.normegil.librarium.tool.test.model.data.AbstractDataEqualityTest;
+import be.normegil.mylibrary.framework.rest.HttpStatus;
+import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
+import be.normegil.mylibrary.tools.test.AbstractDataEqualityTest;
 import org.junit.Test;
 
+import java.net.URI;
 import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -15,14 +14,13 @@ import static org.junit.Assert.assertNotEquals;
 
 public class UTRESTErrorEquality extends AbstractDataEqualityTest<RESTError> {
 
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<RESTError> FACTORY = FactoryRepository.get(RESTError.class);
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<URL> URL_FACTORY = FactoryRepository.get(URL.class);
+	private static final IGenerator<RESTError> GENERATOR = GeneratorRepository.get(RESTError.class);
+	private static final IGenerator<URI> URI_GENERATOR = GeneratorRepository.get(URI.class);
+	private static final int DEFAULT_HASHCODE = 1377548073;
 
 	@Override
 	protected RESTError getNewEntity() {
-		return FACTORY.getDefault();
+		return GENERATOR.getDefault(false, false);
 	}
 
 	@Test
@@ -77,7 +75,7 @@ public class UTRESTErrorEquality extends AbstractDataEqualityTest<RESTError> {
 		RESTError entity = getEntity();
 		RESTError copy = RESTError.builder()
 				.from(entity)
-				.setMoreInfoURL(URL_FACTORY.getNew())
+				.setMoreInfoURL(URI_GENERATOR.getNew(false, false))
 				.build();
 		assertEquals(entity, copy);
 	}
@@ -90,5 +88,11 @@ public class UTRESTErrorEquality extends AbstractDataEqualityTest<RESTError> {
 				.setTime(entity.getTime().plus(2, ChronoUnit.MINUTES))
 				.build();
 		assertNotEquals(entity, copy);
+	}
+
+	@Test
+	public void testHashcode() throws Exception {
+		RESTError restError = GENERATOR.getDefault(false, false);
+		assertEquals(DEFAULT_HASHCODE, restError.hashCode());
 	}
 }

@@ -6,7 +6,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		UTSpecificResourceSafety.class,
-		UTSpecificResource.class
+		UTSpecificResource.class,
+		UTSpecificResourceEquality.class
 })
 public class SpecificResourceTestSuite {
 }

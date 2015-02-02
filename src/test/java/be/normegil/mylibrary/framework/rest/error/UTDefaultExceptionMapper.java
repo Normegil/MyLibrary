@@ -24,9 +24,8 @@ public class UTDefaultExceptionMapper {
 		Response response = defaultExceptionMapper.toResponse(new IllegalStateException(""));
 		RESTError toTest = (RESTError) response.getEntity();
 		Optional<RESTError> restErrorOptional = new ErrorRepository().get(DefaultExceptionMapper.DEFAULT_ERROR_CODE);
-		RESTError expected = RESTError.builder().from(restErrorOptional.get())
-				.setTime(toTest.getTime())
-				.build();
+		RESTError expected = restErrorOptional.get()
+				.withTime(toTest.getTime());
 		assertEquals(expected, toTest);
 	}
 
@@ -41,9 +40,8 @@ public class UTDefaultExceptionMapper {
 		Response response = defaultExceptionMapper.toResponse(new WebApplicationException(ErrorCode.ACCESS_DENIED, new IllegalStateException("")));
 		RESTError toTest = (RESTError) response.getEntity();
 		Optional<RESTError> restErrorOptional = new ErrorRepository().get(ErrorCode.ACCESS_DENIED.getCode());
-		RESTError expected = RESTError.builder().from(restErrorOptional.get())
-				.setTime(toTest.getTime())
-				.build();
+		RESTError expected = restErrorOptional.get()
+				.withTime(toTest.getTime());
 		assertEquals(expected, toTest);
 	}
 }

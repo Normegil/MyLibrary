@@ -73,6 +73,18 @@ public class RESTError {
 		return httpStatus;
 	}
 
+	public String getMessage() {
+		return message;
+	}
+
+	public String getDeveloperMessage() {
+		return developerMessage;
+	}
+
+	public URI getMoreInfoUri() {
+		return moreInfoUri;
+	}
+
 	public LocalDateTime getTime() {
 		return time;
 	}

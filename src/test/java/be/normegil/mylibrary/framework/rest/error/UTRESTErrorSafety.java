@@ -1,10 +1,9 @@
-package be.normegil.librarium.model.rest.exception;
+package be.normegil.mylibrary.framework.rest.error;
 
-import be.normegil.librarium.WarningTypes;
-import be.normegil.librarium.libraries.ClassWrapper;
-import be.normegil.librarium.tool.DataFactory;
-import be.normegil.librarium.tool.FactoryRepository;
-import be.normegil.librarium.tool.validation.Validator;
+import be.normegil.mylibrary.tools.ClassWrapper;
+import be.normegil.mylibrary.tools.GeneratorRepository;
+import be.normegil.mylibrary.tools.IGenerator;
+import be.normegil.mylibrary.tools.Validator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,14 +12,13 @@ import javax.validation.ConstraintViolationException;
 
 public class UTRESTErrorSafety {
 
-	@SuppressWarnings(WarningTypes.UNCHECKED_CAST)
-	private static final DataFactory<RESTError> FACTORY = FactoryRepository.get(RESTError.class);
+	private static final IGenerator<RESTError> GENERATOR = GeneratorRepository.get(RESTError.class);
 	private static final ClassWrapper<RESTError> CLASS = new ClassWrapper<>(RESTError.class);
 	private RESTError entity;
 
 	@Before
 	public void setUp() throws Exception {
-		entity = FACTORY.getDefault();
+		entity = GENERATOR.getDefault(false, false);
 	}
 
 	@After
