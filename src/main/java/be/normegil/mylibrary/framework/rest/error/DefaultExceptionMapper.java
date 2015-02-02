@@ -60,14 +60,4 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 			return getWebApplicationException(throwable.getCause());
 		}
 	}
-
-	private String concatExceptionMessages(final Throwable throwable) {
-		if (throwable == null) {
-			return "";
-		} else if (throwable.getCause() == null) {
-			return throwable.getMessage();
-		} else {
-			return concatExceptionMessages(throwable.getCause()) + " -> " + throwable.getMessage();
-		}
-	}
 }

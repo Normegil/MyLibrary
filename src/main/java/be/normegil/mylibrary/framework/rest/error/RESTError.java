@@ -73,6 +73,10 @@ public class RESTError {
 		return httpStatus;
 	}
 
+	public LocalDateTime getTime() {
+		return time;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
