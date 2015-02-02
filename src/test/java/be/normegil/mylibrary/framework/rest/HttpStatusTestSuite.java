@@ -5,8 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		CollectionResourceTestSuite.class,
-		HttpStatusTestSuite.class
+		UTHttpStatus.class,
+		UTCategory.class
 })
-public class RestPackageTestSuite {
+public class HttpStatusTestSuite {
 }

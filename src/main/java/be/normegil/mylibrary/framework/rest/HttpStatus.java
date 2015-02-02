@@ -2,6 +2,10 @@ package be.normegil.mylibrary.framework.rest;
 
 import be.normegil.mylibrary.framework.exception.UnknownEnumValueRuntimeException;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum HttpStatus {
 
 	CONTINUE(100, "Continue"),
@@ -69,8 +73,7 @@ public enum HttpStatus {
 
 	private final String reasonPhrase;
 
-
-	private HttpStatus(int value, String reasonPhrase) {
+	HttpStatus(int value, String reasonPhrase) {
 		this.value = value;
 		this.reasonPhrase = reasonPhrase;
 	}
@@ -92,8 +95,8 @@ public enum HttpStatus {
 		return reasonPhrase;
 	}
 
-	public Series series() {
-		return Series.valueOf(this);
+	public Category series() {
+		return Category.valueOf(this);
 	}
 
 	@Override
@@ -101,7 +104,7 @@ public enum HttpStatus {
 		return Integer.toString(value);
 	}
 
-	public static enum Series {
+	public static enum Category {
 
 		INFORMATIONAL(1),
 		SUCCESSFUL(2),
@@ -111,18 +114,20 @@ public enum HttpStatus {
 
 		private final int value;
 
-		private Series(int value) {
+		private Category(int value) {
 			this.value = value;
 		}
 
-		private static Series valueOf(HttpStatus status) {
+		public static Category valueOf(HttpStatus status) {
 			int seriesCode = status.value() / 100;
-			for (Series series : values()) {
-				if (series.value == seriesCode) {
-					return series;
-				}
+			List<Category> series = Arrays.stream(values())
+					.filter((s) -> s.value() == seriesCode)
+					.collect(Collectors.toList());
+			if (series.size() == 1) {
+				return series.iterator().next();
+			} else {
+				throw new UnknownEnumValueRuntimeException("No matching constant for [" + status + "] - Inconsitance in the Enums");
 			}
-			throw new UnknownEnumValueRuntimeException("No matching constant for [" + status + "]");
 		}
 
 		public int value() {
