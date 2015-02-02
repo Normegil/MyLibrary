@@ -5,8 +5,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		ErrorCodeTestSuite.class,
-		ErrorRepositoryTestSuite.class
+		UTErrorRepository.class
 })
-public class ErrorPackageTestSuite {
+public class ErrorRepositoryTestSuite {
 }
