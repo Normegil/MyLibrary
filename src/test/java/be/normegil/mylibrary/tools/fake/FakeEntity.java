@@ -1,6 +1,7 @@
 package be.normegil.mylibrary.tools.fake;
 
 import be.normegil.mylibrary.framework.Entity;
+import be.normegil.mylibrary.framework.annotation.DefaultRESTService;
 import be.normegil.mylibrary.framework.rest.RESTService;
 
 import javax.ws.rs.Path;
@@ -22,6 +23,7 @@ public class FakeEntity extends Entity {
 	}
 
 	@Path("/fakeentities")
+	@DefaultRESTService
 	public static class RestService implements RESTService<FakeEntity> {
 		@Override
 		public Response getAll(@Context final UriInfo info, final Long offset, final Integer limit) {

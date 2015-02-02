@@ -3,6 +3,7 @@ package be.normegil.mylibrary.manga;
 import be.normegil.mylibrary.ApplicationProperties;
 import be.normegil.mylibrary.framework.URIHelper;
 import be.normegil.mylibrary.framework.Updatable;
+import be.normegil.mylibrary.framework.annotation.DefaultRESTService;
 import be.normegil.mylibrary.framework.exception.WebApplicationException;
 import be.normegil.mylibrary.framework.rest.CollectionResource;
 import be.normegil.mylibrary.framework.rest.HttpStatus;
@@ -25,6 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@DefaultRESTService
 @Path("/mangas")
 public class MangaREST implements RESTService<Manga> {
 

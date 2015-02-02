@@ -5,10 +5,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-		CollectionResourceTestSuite.class,
-		HttpStatusTestSuite.class,
-		RESTHelperTestSuite.class,
-		RESTServicesTestSuite.class
+		UTRESTServicesSafety.class,
+		UTRESTServices.class
 })
-public class RestPackageTestSuite {
+public class RESTServicesTestSuite {
 }
