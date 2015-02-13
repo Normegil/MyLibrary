@@ -4,6 +4,7 @@ import be.normegil.mylibrary.framework.constraint.NotEmpty;
 import be.normegil.mylibrary.framework.dao.DatabaseDAO;
 
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.*;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Stateless
-public class UserDatabaseDAO extends DatabaseDAO<User> {
+public class UserDatabaseDAO extends DatabaseDAO<User> implements UserDAO{
 
 	private static final String USER_PSEUDO_FIELD_NAME = "pseudo";
 

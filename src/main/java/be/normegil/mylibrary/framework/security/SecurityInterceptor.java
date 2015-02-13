@@ -13,6 +13,7 @@ import be.normegil.mylibrary.framework.security.rightsmanagement.RightsManager;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.Resource;
 import be.normegil.mylibrary.framework.security.rightsmanagement.resource.SpecificResource;
 import be.normegil.mylibrary.user.User;
+import be.normegil.mylibrary.user.UserDAO;
 import be.normegil.mylibrary.user.UserDatabaseDAO;
 import com.nimbusds.jwt.SignedJWT;
 import org.apache.commons.lang3.StringUtils;
@@ -37,7 +38,7 @@ import java.util.List;
 public class SecurityInterceptor implements ContainerRequestFilter, ContainerResponseFilter {
 
 	@Inject
-	private UserDatabaseDAO userDAO;
+	private UserDAO userDAO;
 
 	@Inject
 	private Authenticator authenticator;
@@ -51,7 +52,7 @@ public class SecurityInterceptor implements ContainerRequestFilter, ContainerRes
 	@Inject
 	private RESTHelper restHelper;
 
-	protected SecurityInterceptor() {
+	public SecurityInterceptor() {
 	}
 
 	protected SecurityInterceptor(final Authenticator authenticator, final RightsManager rightsManager, final RESTHelper restHelper) {

@@ -15,7 +15,7 @@ public class KeyManager {
 	private KeyDAO dao;
 
 	//Should only be used by injection
-	protected KeyManager() {
+	public KeyManager() {
 	}
 
 	public KeyManager(final KeyDAO dao) {

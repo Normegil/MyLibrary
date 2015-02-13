@@ -26,7 +26,7 @@ public class Authenticator {
 	@Inject
 	private JWTHelper jwtHelper;
 
-	protected Authenticator() {
+	public Authenticator() {
 	}
 
 	public Authenticator(@NotNull final UserDAO dao, @NotNull final JWTHelper jwtHelper) {

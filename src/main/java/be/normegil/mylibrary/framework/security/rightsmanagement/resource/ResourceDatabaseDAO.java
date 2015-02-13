@@ -30,7 +30,7 @@ public class ResourceDatabaseDAO extends DatabaseDAO<Resource> implements Resour
 		);
 	}
 
-	protected ResourceDatabaseDAO() {
+	public ResourceDatabaseDAO() {
 	}
 
 	public ResourceDatabaseDAO(@NotNull final EntityManager entityManager) {

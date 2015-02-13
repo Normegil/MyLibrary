@@ -20,7 +20,7 @@ public class KeyDatabaseDAO extends DatabaseDAO<Key> implements KeyDAO {
 
 	private static final String KEY_NAME_FIELD_NAME = "name";
 
-	protected KeyDatabaseDAO() {
+	public KeyDatabaseDAO() {
 	}
 
 	public KeyDatabaseDAO(@NotNull final EntityManager entityManager) {

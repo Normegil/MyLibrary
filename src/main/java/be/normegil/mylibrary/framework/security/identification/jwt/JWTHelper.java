@@ -37,7 +37,7 @@ public class JWTHelper {
 	@Inject
 	private KeyManager keyManager;
 
-	protected JWTHelper() {
+	public JWTHelper() {
 	}
 
 	public JWTHelper(@NotNull final KeyManager keyManager) {

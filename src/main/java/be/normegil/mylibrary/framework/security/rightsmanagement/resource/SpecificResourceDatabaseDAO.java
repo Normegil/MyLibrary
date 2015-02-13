@@ -24,7 +24,7 @@ public class SpecificResourceDatabaseDAO extends DatabaseDAO<SpecificResource> i
 		super(entityManager);
 	}
 
-	protected SpecificResourceDatabaseDAO() {
+	public SpecificResourceDatabaseDAO() {
 	}
 
 	public Optional<SpecificResource> get(@NotNull final Class<? extends RESTService> restServiceClass, @NotEmpty final String id) {

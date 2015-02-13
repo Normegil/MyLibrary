@@ -24,7 +24,7 @@ public class RightsManager {
 	@Inject
 	private ResourceDAO resourceDAO;
 
-	protected RightsManager() {
+	public RightsManager() {
 	}
 
 	public RightsManager(@NotNull final RightDAO rightDAO, @NotNull final ResourceDAO resourceDAO) {
